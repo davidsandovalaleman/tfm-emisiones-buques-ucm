@@ -1,0 +1,30 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# .gitattributes — TFM Predicción de emisiones de CO₂ de buques
+#
+# Sin normalización de finales de línea (`* -text`), y a propósito.
+#
+# La reproducibilidad del proyecto se comprueba regenerando los artefactos y
+# comparándolos byte a byte con los guardados. Si git convirtiera CRLF↔LF al
+# hacer checkout, esa comparación dejaría de tener sentido: los CSV de reports/
+# se escriben con el fin de línea del sistema que los generó. Se guardan y se
+# recuperan exactamente como están.
+# ─────────────────────────────────────────────────────────────────────────────
+
+* -text
+
+# ── Binarios: sin diff textual, sin conversión ───────────────────────────────
+*.parquet  binary
+*.pickle   binary
+*.joblib   binary
+*.keras    binary
+*.h5       binary
+*.xlsx     binary
+*.png      binary
+*.jpg      binary
+*.pdf      binary
+*.mp4      binary
+
+# ── Notebooks: diff legible en GitHub, sin contar como "código" ──────────────
+*.ipynb    linguist-language=Jupyter\ Notebook
+docs/**    linguist-documentation
+reports/** linguist-documentation

@@ -1,0 +1,15 @@
+tipo,n,t_CO2_por_hora_navegada
+LNG carrier,507,6.484
+Passenger ship,277,6.292
+Ro-pax ship,712,5.629
+Container ship,3183,5.568
+Container/ro-ro cargo ship,123,4.791
+Refrigerated cargo carrier,211,4.787
+Ro-ro ship,353,4.603
+Oil tanker,3257,4.199
+Vehicle carrier,760,4.16
+Bulk carrier,6337,4.076
+Gas carrier,562,3.723
+Chemical tanker,2053,3.391
+Other ship types,476,3.304
+General cargo ship,2287,3.016

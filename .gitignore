@@ -1,0 +1,65 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# .gitignore — TFM Predicción de emisiones de CO₂ de buques
+#
+# Criterio: el repositorio debe poder clonarse y ejecutarse. Por eso SÍ se
+# versionan los modelos y los datos procesados (~50 MB en total), y NO se
+# versiona lo que es descargable de su fuente o regenerable.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Python / entorno ─────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# ── Jupyter ──────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+.virtual_documents/
+
+# ── Datos ────────────────────────────────────────────────────────────────────
+# data/processed/  SÍ se versiona: son los nueve ficheros que permiten reproducir
+#                  el proyecto desde el notebook 02 sin descargar nada.
+# data/raw/        NO: 44 MB de Excel publicados por EMSA, descargables tal cual
+#                  de https://mrv.emsa.europa.eu/#public/emission-report con los
+#                  nombres que espera YEAR_FILES en src/ingest_mrv.py.
+data/raw/*
+!data/raw/.gitkeep
+
+# ── Base de datos generada por el notebook 09 ────────────────────────────────
+*.sqlite
+*.sqlite3
+*.db
+
+# ── Colección documental generada por el notebook 10 ─────────────────────────
+# 14 MB de JSONL que el propio notebook reescribe en segundos desde
+# reports/18_pasaporte_buques.csv, que sí está versionado. Mismo criterio que
+# mrv.sqlite: el artefacto no se versiona, la receta para rehacerlo sí.
+data/processed/pasaportes.jsonl
+
+# ── Extractos para Tableau ───────────────────────────────────────────────────
+# 17 MB de CSV que scripts/exportar_tableau.py regenera en un minuto desde
+# reports/. Mismo criterio que mrv.sqlite y que la colección documental: el
+# artefacto no se versiona, la receta sí.
+reports/tableau/
+
+# ── Vídeo ────────────────────────────────────────────────────────────────────
+video/*
+!video/.gitkeep
+!video/*.md
+
+# ── Sistema / editor ─────────────────────────────────────────────────────────
+~$*
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+
+# ── Credenciales ─────────────────────────────────────────────────────────────
+.env
+*.pem
+*.key

@@ -1,0 +1,18 @@
+ship_type,n,ghgie_mediana,pct_cumple,penalizacion_M_EUR
+Container ship,2224,91.41,7.0,436.05
+Oil tanker,1712,91.31,2.0,152.28
+Ro-pax ship,403,91.01,1.7,139.91
+Bulk carrier,3704,91.33,0.2,124.04
+Chemical tanker,1476,91.24,0.8,82.73
+Passenger ship (Cruise Passenger ship),203,91.13,1.0,82.44
+General cargo ship,2677,90.72,0.1,72.93
+Ro-ro ship,234,91.34,4.7,58.48
+Vehicle carrier,510,91.29,17.8,30.63
+Other ship types (Offshore),482,90.63,0.0,23.76
+Gas carrier,362,91.19,10.5,19.56
+Other ship types,348,91.21,0.9,18.92
+Container/ro-ro cargo ship,60,91.42,0.0,12.39
+LNG carrier,342,85.28,82.2,10.64
+Refrigerated cargo carrier,111,91.43,0.0,7.7
+Passenger ship,29,90.63,0.0,2.77
+Combination carrier,4,91.14,0.0,0.21

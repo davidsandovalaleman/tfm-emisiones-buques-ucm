@@ -1,0 +1,11 @@
+.git/
+__pycache__/
+*.pyc
+.pytest_cache/
+notebooks/
+docs/
+scripts/
+data/raw/
+video/
+*.sqlite
+*.jsonl

@@ -1,0 +1,7 @@
+cii_tipo,rho_quintil_pct_D_E,gradiente_limpio
+gas,-1.0,True
+gencargo,-0.9,True
+container,-0.7,True
+tanker,-0.7,True
+bulk,-0.3,False
+reefer,0.7,False

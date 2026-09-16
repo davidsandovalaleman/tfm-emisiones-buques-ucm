@@ -1,0 +1,3 @@
+nivel,modelo,R2_test,co2_base_Mt,ahorro_Mt,sesgo_base_pct
+3. operacional (publicado en agosto),mezcla,0.9215,154.14434183851398,13.68863863389969,2.695430057257774
+4. operacional + tamano (actual),xgb,0.9484241423405539,152.52725228732885,13.749730103176594,1.6180781096006083

@@ -1,0 +1,4 @@
+poblacion,n,co2_real_Mt,co2_predicho_Mt,sesgo_agregado_pct,R2,MAE_t,error_rel_mediano_pct
+todos los buques de 2025,16939,150.099,157.541,4.96,0.9525,1409.6,13.81
+buques ya presentes antes de 2025,13665,135.863,139.596,2.75,0.9666,1253.0,11.57
+buques nuevos del Reglamento 2023/957,3274,14.236,17.945,26.05,0.6818,2063.2,48.94

@@ -1,0 +1,8 @@
+variable,SHAP medio (t CO2),SHAP %,total_gain %,permutación %,puesto SHAP,puesto total_gain,puesto permutación
+Tipo de buque,7051.89,41.57,34.55,39.64,1,2,2
+Horas en el mar,6374.74,37.58,42.31,40.97,2,1,1
+Eficiencia técnica (EEDI/EIV),1826.48,10.77,16.14,13.44,3,3,3
+Método de eficiencia,1032.76,6.09,3.03,3.17,4,5,4
+Clase de hielo,542.8,3.2,3.04,2.16,5,4,5
+Proporción de missings,113.57,0.67,0.86,0.61,6,6,6
+Subcategoría nueva de EMSA,21.63,0.13,0.07,0.02,7,7,7

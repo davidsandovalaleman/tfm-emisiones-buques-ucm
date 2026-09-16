@@ -1,0 +1,67 @@
+pais,iso3,bloque,buques,co2_Mt,factura_MEUR,ahorro_Mt,pct_de_2025,pct_de_2030,pct_registro_abierto,cuota_pct
+Liberia,LBR,Fuera del EEE,2311,22.567,1243.48,0.9706,31.2,55.5,100.0,14.258
+Malta,MLT,Dentro del EEE,1111,13.13,785.63,0.6567,30.2,52.6,100.0,9.008
+Islas Marshall,MHL,Fuera del EEE,1803,12.813,684.14,0.6483,25.1,50.0,100.0,7.845
+Panamá,PAN,Fuera del EEE,1397,11.926,674.1,0.5362,26.7,47.9,100.0,7.729
+Italia,ITA,Dentro del EEE,264,6.266,509.2,0.4043,23.1,27.7,0.0,5.839
+Singapur,SGP,Fuera del EEE,779,9.212,471.31,0.2434,14.4,38.0,0.0,5.404
+Portugal,PRT,Dentro del EEE,739,7.333,442.45,0.3461,40.3,56.7,98.4,5.073
+Bahamas,BHS,Fuera del EEE,606,7.133,422.36,0.4628,21.3,36.3,100.0,4.843
+Dinamarca,DNK,Dentro del EEE,314,6.406,404.66,0.1826,11.8,25.5,0.0,4.64
+Hong Kong,HKG,Fuera del EEE,428,6.476,340.98,0.2001,23.4,54.7,0.0,3.91
+Chipre,CYP,Dentro del EEE,419,4.661,268.13,0.356,24.1,38.7,98.1,3.075
+Noruega,NOR,Dentro del EEE,426,3.756,263.76,0.3126,13.6,27.9,0.0,3.024
+Grecia,GRC,Dentro del EEE,265,4.246,216.05,0.2469,25.3,44.2,0.0,2.477
+Países Bajos,NLD,Dentro del EEE,411,3.007,198.34,0.2108,26.0,42.3,0.0,2.274
+Bermudas,BMU,Fuera del EEE,79,2.445,143.83,0.1014,10.1,13.9,100.0,1.649
+Antigua y Barbuda,ATG,Fuera del EEE,470,2.232,138.61,0.1002,34.9,46.8,100.0,1.589
+Alemania,DEU,Dentro del EEE,76,2.335,126.1,0.0679,28.9,42.1,0.0,1.446
+Francia,FRA,Dentro del EEE,95,2.138,124.35,0.1472,11.6,12.6,0.0,1.426
+Finlandia,FIN,Dentro del EEE,47,1.415,113.63,0.1025,10.6,19.1,0.0,1.303
+Suecia,SWE,Dentro del EEE,67,1.265,96.2,0.0383,7.5,19.4,0.0,1.103
+Reino Unido,GBR,Fuera del EEE,99,1.193,66.8,0.0715,7.1,18.2,0.0,0.766
+Turquía,TUR,Fuera del EEE,136,1.109,64.78,0.0256,26.5,45.6,0.0,0.743
+Isla de Man,IMN,Fuera del EEE,118,0.833,48.77,0.0704,24.6,42.4,100.0,0.559
+España,ESP,Dentro del EEE,45,1.528,44.59,0.1017,2.2,2.2,0.0,0.511
+China,CHN,Fuera del EEE,85,0.651,40.02,0.029,28.2,57.6,0.0,0.459
+Barbados,BRB,Fuera del EEE,248,0.643,38.39,0.025,16.9,34.3,100.0,0.44
+Luxemburgo,LUX,Dentro del EEE,41,0.376,29.38,0.0435,7.3,14.6,0.0,0.337
+Lituania,LTU,Dentro del EEE,17,0.331,28.32,0.0127,17.6,17.6,0.0,0.325
+Japón,JPN,Fuera del EEE,54,0.604,27.77,0.0143,7.4,13.0,0.0,0.318
+Islas Caimán,CYM,Fuera del EEE,47,0.38,22.24,0.03,42.6,68.1,100.0,0.255
+Corea del Sur,KOR,Fuera del EEE,66,0.454,20.95,0.02,6.1,18.2,0.0,0.24
+Bélgica,BEL,Dentro del EEE,47,0.372,20.24,0.0391,23.4,42.6,0.0,0.232
+Estados Unidos,USA,Fuera del EEE,23,0.384,18.88,0.0155,8.7,43.5,0.0,0.216
+Estonia,EST,Dentro del EEE,6,0.201,17.22,0.0109,16.7,16.7,0.0,0.197
+Islas Feroe,FRO,Fuera del EEE,21,0.252,15.79,0.0095,23.8,23.8,100.0,0.181
+Arabia Saudí,SAU,Fuera del EEE,39,0.215,12.86,0.0158,20.5,43.6,0.0,0.147
+Túnez,TUN,Fuera del EEE,6,0.197,10.78,0.0428,0.0,0.0,0.0,0.124
+Argelia,DZA,Fuera del EEE,16,0.192,10.24,0.0233,81.2,81.2,0.0,0.117
+Taiwán,TWN,Fuera del EEE,3,0.184,9.5,0.0043,0.0,100.0,0.0,0.109
+Gibraltar,GIB,Fuera del EEE,26,0.119,8.61,0.006,38.5,46.2,100.0,0.099
+Irlanda,IRL,Dentro del EEE,18,0.088,7.46,0.0059,33.3,55.6,0.0,0.085
+Filipinas,PHL,Fuera del EEE,28,0.115,6.97,0.007,21.4,46.4,0.0,0.08
+Croacia,HRV,Dentro del EEE,12,0.145,6.81,0.0015,33.3,41.7,0.0,0.078
+Letonia,LVA,Dentro del EEE,32,0.108,5.74,0.0043,9.4,9.4,0.0,0.066
+Wallis y Futuna,WLF,Fuera del EEE,10,0.064,4.75,0.005,0.0,0.0,100.0,0.054
+Curazao,CUW,Fuera del EEE,7,0.067,4.66,0.0183,0.0,14.3,100.0,0.053
+Kuwait,KWT,Fuera del EEE,5,0.078,4.4,0.0031,0.0,80.0,0.0,0.05
+India,IND,Fuera del EEE,17,0.096,4.22,0.0034,52.9,76.5,0.0,0.048
+Marruecos,MAR,Fuera del EEE,8,0.07,4.13,0.0043,37.5,62.5,0.0,0.047
+San Marino,SMR,Fuera del EEE,34,0.077,4.04,0.0025,20.6,32.4,0.0,0.046
+San Cristóbal y Nieves,KNA,Fuera del EEE,70,0.097,4.01,0.0057,18.6,27.1,100.0,0.046
+Palaos,PLW,Fuera del EEE,62,0.091,3.53,0.0043,22.6,33.9,100.0,0.041
+Egipto,EGY,Fuera del EEE,13,0.059,3.25,0.0069,61.5,84.6,0.0,0.037
+Brasil,BRA,Fuera del EEE,11,0.057,3.18,0.0091,63.6,81.8,0.0,0.036
+Seychelles,SYC,Fuera del EEE,4,0.041,3.12,0.0032,100.0,100.0,100.0,0.036
+Bangladés,BGD,Fuera del EEE,18,0.052,2.9,0.0012,11.1,44.4,0.0,0.033
+Sierra Leona,SLE,Fuera del EEE,31,0.071,2.9,0.0046,19.4,61.3,100.0,0.033
+San Vicente y las Granadinas,VCT,Fuera del EEE,23,0.044,2.45,0.0003,0.0,17.4,100.0,0.028
+Tailandia,THA,Fuera del EEE,17,0.038,2.12,0.0009,29.4,88.2,0.0,0.024
+Vanuatu,VUT,Fuera del EEE,26,0.041,2.01,0.0029,0.0,3.8,100.0,0.023
+Belice,BLZ,Fuera del EEE,16,0.036,1.82,0.0031,18.8,37.5,100.0,0.021
+Israel,ISR,Fuera del EEE,1,0.03,1.79,0.0035,100.0,100.0,0.0,0.021
+Indonesia,IDN,Fuera del EEE,6,0.037,1.77,0.0017,50.0,66.7,0.0,0.02
+Tuvalu,TUV,Fuera del EEE,16,0.047,1.66,0.0037,25.0,31.2,100.0,0.019
+Bulgaria,BGR,Dentro del EEE,3,0.028,1.59,0.0003,0.0,0.0,0.0,0.018
+Malasia,MYS,Fuera del EEE,2,0.027,1.33,0.0,0.0,50.0,0.0,0.015

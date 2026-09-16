@@ -1,0 +1,13 @@
+# Dependencias del SERVICIO, no del trabajo. Las versiones son las de requirements-lock.txt para
+# que el modelo servido sea bit a bit el mismo que el verificado; lo que falta aqui respecto a
+# requirements.txt es deliberado: TensorFlow, Jupyter, SHAP, matplotlib y las herramientas de
+# analisis no participan en responder una peticion.
+numpy==2.4.4
+pandas==3.0.2
+scipy==1.17.1
+scikit-learn==1.8.0
+xgboost==3.2.0
+pyarrow
+fastapi
+uvicorn[standard]
+pydantic

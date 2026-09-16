@@ -1,0 +1,135 @@
+columna,etiqueta_original_portal
+additional_information_to_facilitate_the_understanding_of_the_reported_average_operational_energy_efficiency_indicators,Additional information to facilitate the understanding of the reported average operational energy efficiency indicators
+annual_average_co2_emissions_per_distance_kg_co2_n_mile,Annual average CO₂ emissions per distance [kg CO₂ / n mile]
+annual_average_co2_emissions_per_transport_work_dwt_g_co2_dwt_carried_n_miles,Annual average CO₂ emissions per transport work (dwt) [g CO₂ / dwt carried · n miles]
+annual_average_co2_emissions_per_transport_work_freight_g_co2_m_tonnes_n_miles,Annual average CO₂ emissions per transport work (freight) [g CO₂ / m tonnes · n miles]
+annual_average_co2_emissions_per_transport_work_mass_g_co2_m_tonnes_n_miles,Annual average CO₂ emissions per transport work (mass) [g CO₂ / m tonnes · n miles]
+annual_average_co2_emissions_per_transport_work_pax_g_co2_pax_n_miles,Annual average CO₂ emissions per transport work (pax) [g CO₂ / pax · n miles]
+annual_average_co2_emissions_per_transport_work_volume_g_co2_m3_n_miles,Annual average CO₂ emissions per transport work (volume) [g CO₂ / m³ · n miles]
+annual_average_fuel_consumption_per_distance_kg_n_mile,Annual average Fuel consumption per distance [kg / n mile]
+annual_average_fuel_consumption_per_transport_work_dwt_g_dwt_carried_n_miles,Annual average Fuel consumption per transport work (dwt) [g / dwt carried · n miles]
+annual_average_fuel_consumption_per_transport_work_freight_g_m_tonnes_n_miles,Annual average Fuel consumption per transport work (freight) [g / m tonnes · n miles]
+annual_average_fuel_consumption_per_transport_work_mass_g_m_tonnes_n_miles,Annual average Fuel consumption per transport work (mass) [g / m tonnes · n miles]
+annual_average_fuel_consumption_per_transport_work_pax_g_pax_n_miles,Annual average Fuel consumption per transport work (pax) [g / pax · n miles]
+annual_average_fuel_consumption_per_transport_work_volume_g_m3_n_miles,Annual average Fuel consumption per transport work (volume) [g / m³ · n miles]
+annual_time_spent_at_sea_hours,Annual Time spent at sea [hours]
+annual_total_time_spent_at_sea_hours,Annual Total time spent at sea [hours] [REDUNDANTE: mismo concepto que 'annual_time_spent_at_sea_hours' bajo un rótulo de grupo distinto según el año; sus valores ya se han volcado en 'annual_time_spent_at_sea_hours' cuando esta estaba vacía — usar la columna canónica para el análisis]
+average_density_of_the_cargo_transported_m_tonnes_m3,Average density of the cargo transported [m tonnes / m³]
+ch4_emissions_assigned_to_freight_transport_m_tonnes,CH₄ emissions assigned to Freight transport [m tonnes]
+ch4_emissions_assigned_to_on_laden_m_tonnes,CH₄ emissions assigned to On laden [m tonnes]
+ch4_emissions_assigned_to_passenger_transport_m_tonnes,CH₄ emissions assigned to Passenger transport [m tonnes]
+ch4_emissions_from_all_voyages_between_ports_under_a_ms_jurisdiction_m_tonnes,CH₄ emissions from all voyages between ports under a MS jurisdiction [m tonnes]
+ch4_emissions_from_all_voyages_to_ports_under_a_ms_jurisdiction_m_tonnes,CH₄ emissions from all voyages to ports under a MS jurisdiction [m tonnes]
+ch4_emissions_from_all_voyages_which_departed_from_ports_under_a_ms_jurisdiction_m_tonnes,CH₄ emissions from all voyages which departed from ports under a MS jurisdiction [m tonnes]
+ch4_emissions_to_be_reported_under_directive_2003_87_ec_m_tonnes,CH₄ emissions to be reported under Directive 2003/87/EC [m tonnes]
+ch4_emissions_which_occurred_within_ports_under_a_ms_jurisdiction_at_berth_m_tonnes,CH₄ emissions which occurred within ports under a MS jurisdiction at berth [m tonnes]
+ch4_emissions_which_occurred_within_ports_under_a_ms_jurisdiction_m_tonnes,CH₄ emissions which occurred within ports under a MS jurisdiction [m tonnes]
+co2_emissions_assigned_to_freight_transport_m_tonnes,CO₂ emissions assigned to Freight transport [m tonnes]
+co2_emissions_assigned_to_on_laden_m_tonnes,CO₂ emissions assigned to On laden [m tonnes]
+co2_emissions_assigned_to_passenger_transport_m_tonnes,CO₂ emissions assigned to Passenger transport [m tonnes]
+co2_emissions_from_all_voyages_between_ports_under_a_ms_jurisdiction_m_tonnes,CO₂ emissions from all voyages between ports under a MS jurisdiction [m tonnes]
+co2_emissions_from_all_voyages_to_ports_under_a_ms_jurisdiction_m_tonnes,CO₂ emissions from all voyages to ports under a MS jurisdiction [m tonnes]
+co2_emissions_from_all_voyages_which_departed_from_ports_under_a_ms_jurisdiction_m_tonnes,CO₂ emissions from all voyages which departed from ports under a MS jurisdiction [m tonnes]
+co2_emissions_per_distance_kg_co2_n_mile,CO₂ emissions per distance [kg CO₂ / n mile]
+co2_emissions_per_distance_on_laden_voyages_kg_co2_n_mile,CO₂ emissions per distance on laden voyages [kg CO₂ / n mile]
+co2_emissions_per_time_spent_at_sea_m_tonnes_co2_hour,CO₂ emissions per time spent at sea [m tonnes CO₂ / hour]
+co2_emissions_per_transport_work_dwt_g_co2_dwt_carried_n_miles,CO₂ emissions per transport work (dwt) [g CO₂ / dwt carried · n miles]
+co2_emissions_per_transport_work_dwt_on_laden_voyages_g_co2_dwt_carried_n_miles,CO₂ emissions per transport work (dwt) on laden voyages [g CO₂ / dwt carried · n miles]
+co2_emissions_per_transport_work_freight_g_co2_m_tonnes_n_miles,CO₂ emissions per transport work (freight) [g CO₂ / m tonnes · n miles]
+co2_emissions_per_transport_work_freight_on_laden_voyages_g_co2_m_tonnes_n_miles,CO₂ emissions per transport work (freight) on laden voyages [g CO₂ / m tonnes · n miles]
+co2_emissions_per_transport_work_mass_g_co2_m_tonnes_n_miles,CO₂ emissions per transport work (mass) [g CO₂ / m tonnes · n miles]
+co2_emissions_per_transport_work_mass_on_laden_voyages_g_co2_m_tonnes_n_miles,CO₂ emissions per transport work (mass) on laden voyages [g CO₂ / m tonnes · n miles]
+co2_emissions_per_transport_work_pax_g_co2_pax_n_miles,CO₂ emissions per transport work (pax) [g CO₂ / pax · n miles]
+co2_emissions_per_transport_work_pax_on_laden_voyages_g_co2_pax_n_miles,CO₂ emissions per transport work (pax) on laden voyages [g CO₂ / pax · n miles]
+co2_emissions_per_transport_work_volume_g_co2_m3_n_miles,CO₂ emissions per transport work (volume) [g CO₂ / m³ · n miles]
+co2_emissions_per_transport_work_volume_on_laden_voyages_g_co2_m3_n_miles,CO₂ emissions per transport work (volume) on laden voyages [g CO₂ / m³ · n miles]
+co2_emissions_to_be_reported_under_directive_2003_87_ec_m_tonnes,CO2 emissions to be reported under Directive 2003/87/EC [m tonnes]
+co2_emissions_which_occurred_within_ports_under_a_ms_jurisdiction_at_berth_m_tonnes,CO₂ emissions which occurred within ports under a MS jurisdiction at berth [m tonnes]
+co2_emissions_which_occurred_within_ports_under_a_ms_jurisdiction_m_tonnes,CO₂ emissions which occurred within ports under a MS jurisdiction [m tonnes]
+co2eq_emissions_assigned_to_freight_transport_m_tonnes,CO₂eq emissions assigned to Freight transport [m tonnes]
+co2eq_emissions_assigned_to_on_laden_m_tonnes,CO₂eq emissions assigned to On laden [m tonnes]
+co2eq_emissions_assigned_to_passenger_transport_m_tonnes,CO₂eq emissions assigned to Passenger transport [m tonnes]
+co2eq_emissions_benefitting_from_a_derogation_in_accordance_with_part_c_point_1_2_of_annex_ii_to_regulation_eu_2015_757_voluntary_m_tonnes,"CO₂eq emissions benefitting from a derogation in accordance with Part C, point 1.2, of Annex II to Regulation (EU) 2015/757 (voluntary) [m tonnes]"
+co2eq_emissions_from_all_voyages_between_ports_under_a_ms_jurisdiction_m_tonnes,CO₂eq emissions from all voyages between ports under a MS jurisdiction [m tonnes]
+co2eq_emissions_from_all_voyages_to_ports_under_a_ms_jurisdiction_m_tonnes,CO₂eq emissions from all voyages to ports under a MS jurisdiction [m tonnes]
+co2eq_emissions_from_all_voyages_which_departed_from_ports_under_a_ms_jurisdiction_m_tonnes,CO₂eq emissions from all voyages which departed from ports under a MS jurisdiction [m tonnes]
+co2eq_emissions_per_distance_kg_co2eq_n_mile,CO₂eq emissions per distance [kg CO₂eq / n mile]
+co2eq_emissions_per_distance_on_laden_voyages_kg_co2eq_n_mile,CO₂eq emissions per distance on laden voyages [kg CO₂eq / n mile]
+co2eq_emissions_per_time_spent_at_sea_m_tonnes_co2eq_m_tonnes_n_miles,CO₂eq emissions per time spent at sea [m tonnes CO₂eq / m tonnes · n miles]
+co2eq_emissions_per_transport_work_dwt_g_co2eq_dwt_carried_n_miles,CO₂eq emissions per transport work (dwt) [g CO₂eq / dwt carried · n miles]
+co2eq_emissions_per_transport_work_dwt_on_laden_voyages_g_co2eq_dwt_carried_n_miles,CO₂eq emissions per transport work (dwt) on laden voyages [g CO₂eq / dwt carried · n miles]
+co2eq_emissions_per_transport_work_freight_g_co2eq_m_tonnes_n_miles,CO₂eq emissions per transport work (freight) [g CO₂eq / m tonnes · n miles]
+co2eq_emissions_per_transport_work_freight_on_laden_voyages_g_co2eq_m_tonnes_n_miles,CO₂eq emissions per transport work (freight) on laden voyages [g CO₂eq / m tonnes · n miles]
+co2eq_emissions_per_transport_work_mass_g_co2eq_m_tonnes_n_miles,CO₂eq emissions per transport work (mass) [g CO₂eq / m tonnes · n miles]
+co2eq_emissions_per_transport_work_mass_on_laden_voyages_g_co2eq_m_tonnes_n_miles,CO₂eq emissions per transport work (mass) on laden voyages [g CO₂eq / m tonnes · n miles]
+co2eq_emissions_per_transport_work_pax_g_co2eq_pax_n_miles,CO₂eq emissions per transport work (pax) [g CO₂eq / pax · n miles]
+co2eq_emissions_per_transport_work_pax_on_laden_voyages_g_co2eq_pax_n_miles,CO₂eq emissions per transport work (pax) on laden voyages [g CO₂eq / pax · n miles]
+co2eq_emissions_per_transport_work_volume_g_co2eq_m3_n_miles,CO₂eq emissions per transport work (volume) [g CO₂eq / m³ · n miles]
+co2eq_emissions_per_transport_work_volume_on_laden_voyages_g_co2eq_m3_n_miles,CO₂eq emissions per transport work (volume) on laden voyages [g CO₂eq / m³ · n miles]
+co2eq_emissions_to_be_reported_under_directive_2003_87_ec_m_tonnes,CO₂eq emissions to be reported under Directive 2003/87/EC [m tonnes]
+co2eq_emissions_which_occurred_within_ports_under_a_ms_jurisdiction_at_berth_m_tonnes,CO₂eq emissions which occurred within ports under a MS jurisdiction at berth [m tonnes]
+co2eq_emissions_which_occurred_within_ports_under_a_ms_jurisdiction_m_tonnes,CO₂eq emissions which occurred within ports under a MS jurisdiction [m tonnes]
+company_imo_number,Company IMO Number
+company_name,Company Name
+distance_through_ice_n_miles,Distance through ice [n miles]
+doc_expiry_date,DoC expiry date
+doc_issue_date,DoC issue date
+fuel_consumption_per_distance_kg_n_mile,Fuel consumption per distance [kg / n mile]
+fuel_consumption_per_distance_on_laden_voyages_kg_n_mile,Fuel consumption per distance on laden voyages [kg / n mile]
+fuel_consumption_per_time_spent_at_sea_m_tonnes_hour,Fuel consumption per time spent at sea [m tonnes / hour]
+fuel_consumption_per_transport_work_dwt_g_dwt_carried_n_miles,Fuel consumption per transport work (dwt) [g / dwt carried · n miles]
+fuel_consumption_per_transport_work_dwt_on_laden_voyages_g_dwt_carried_n_miles,Fuel consumption per transport work (dwt) on laden voyages [g / dwt carried · n miles]
+fuel_consumption_per_transport_work_freight_g_m_tonnes_n_miles,Fuel consumption per transport work (freight) [g / m tonnes · n miles]
+fuel_consumption_per_transport_work_freight_on_laden_voyages_g_m_tonnes_n_miles,Fuel consumption per transport work (freight) on laden voyages [g / m tonnes · n miles]
+fuel_consumption_per_transport_work_mass_g_m_tonnes_n_miles,Fuel consumption per transport work (mass) [g / m tonnes · n miles]
+fuel_consumption_per_transport_work_mass_on_laden_voyages_g_m_tonnes_n_miles,Fuel consumption per transport work (mass) on laden voyages [g / m tonnes · n miles]
+fuel_consumption_per_transport_work_pax_g_pax_n_miles,Fuel consumption per transport work (pax) [g / pax · n miles]
+fuel_consumption_per_transport_work_pax_on_laden_voyages_g_pax_n_miles,Fuel consumption per transport work (pax) on laden voyages [g / pax · n miles]
+fuel_consumption_per_transport_work_volume_g_m3_n_miles,Fuel consumption per transport work (volume) [g / m³ · n miles]
+fuel_consumption_per_transport_work_volume_on_laden_voyages_g_m3_n_miles,Fuel consumption per transport work (volume) on laden voyages [g / m³ · n miles]
+fuel_consumptions_assigned_to_cargo_heating_m_tonnes,Fuel consumptions assigned to Cargo heating [m tonnes]
+fuel_consumptions_assigned_to_dynamic_positioning_m_tonnes,Fuel consumptions assigned to Dynamic positioning [m tonnes]
+fuel_consumptions_assigned_to_on_laden_m_tonnes,Fuel consumptions assigned to On laden [m tonnes]
+home_port,Home Port
+ice_class,Ice Class
+monitoring_methods_a,Monitoring methods A
+monitoring_methods_b,Monitoring methods B
+monitoring_methods_c,Monitoring methods C
+monitoring_methods_d,Monitoring methods D
+monitoring_methods_d_2,Monitoring methods D 2
+n2o_emissions_assigned_to_freight_transport_m_tonnes,N₂O emissions assigned to Freight transport [m tonnes]
+n2o_emissions_assigned_to_on_laden_m_tonnes,N₂O emissions assigned to On laden [m tonnes]
+n2o_emissions_assigned_to_passenger_transport_m_tonnes,N₂O emissions assigned to Passenger transport [m tonnes]
+n2o_emissions_from_all_voyages_between_ports_under_a_ms_jurisdiction_m_tonnes,N₂O emissions from all voyages between ports under a MS jurisdiction [m tonnes]
+n2o_emissions_from_all_voyages_to_ports_under_a_ms_jurisdiction_m_tonnes,N₂O emissions from all voyages to ports under a MS jurisdiction [m tonnes]
+n2o_emissions_from_all_voyages_which_departed_from_ports_under_a_ms_jurisdiction_m_tonnes,N₂O emissions from all voyages which departed from ports under a MS jurisdiction [m tonnes]
+n2o_emissions_to_be_reported_under_directive_2003_87_ec_m_tonnes,N₂O emissions to be reported under Directive 2003/87/EC [m tonnes]
+n2o_emissions_which_occurred_within_ports_under_a_ms_jurisdiction_at_berth_m_tonnes,N₂O emissions which occurred within ports under a MS jurisdiction at berth [m tonnes]
+n2o_emissions_which_occurred_within_ports_under_a_ms_jurisdiction_m_tonnes,N₂O emissions which occurred within ports under a MS jurisdiction [m tonnes]
+port_of_registry,Port of Registry
+report_coverage,"Cobertura del informe: 'Full' (año completo) o 'Partial' (informe parcial Art. 11(2), p.ej. por cambio de compañía a mitad de año) (añadido en la ingesta)"
+reporting_period,Reporting Period
+reporting_year,"Año del informe (añadido en la ingesta, a partir del fichero de origen)"
+ship_imo_number,Ship IMO Number
+ship_name,Ship Name
+ship_type,Ship type
+source_file,Fichero .xlsx de data/raw/ del que procede la fila (añadido en la ingesta)
+technical_efficiency,Technical efficiency
+through_ice_n_miles,Through ice [n miles] [REDUNDANTE: mismo concepto que 'distance_through_ice_n_miles' bajo un rótulo de grupo distinto según el año; sus valores ya se han volcado en 'distance_through_ice_n_miles' cuando esta estaba vacía — usar la columna canónica para el análisis]
+time_spent_at_sea_hours,Time spent at sea [hours]
+time_spent_at_sea_through_ice_hours,Time spent at sea through ice [hours]
+total_ch4_emissions_m_tonnes,Total CH₄ emissions [m tonnes]
+total_co2_emissions_m_tonnes,Total CO₂ emissions [m tonnes]
+total_co2eq_emissions_m_tonnes,Total CO₂eq emissions [m tonnes]
+total_fuel_benefitting_from_a_derogation_in_accordance_with_part_c_point_1_2_of_annex_ii_to_regulation_eu_2015_757_voluntary_m_tonnes,"Total fuel benefitting from a derogation in accordance with Part C, point 1.2, of Annex II to Regulation (EU) 2015/757 (voluntary) [m tonnes]"
+total_fuel_consumption_m_tonnes,Total fuel consumption [m tonnes]
+total_n2o_emissions_m_tonnes,Total N₂O emissions [m tonnes]
+total_time_spent_at_sea_hours,Total time spent at sea [hours] [REDUNDANTE: mismo concepto que 'time_spent_at_sea_hours' bajo un rótulo de grupo distinto según el año; sus valores ya se han volcado en 'time_spent_at_sea_hours' cuando esta estaba vacía — usar la columna canónica para el análisis]
+total_time_spent_at_sea_through_ice_hours,Total time spent at sea through ice [hours] [REDUNDANTE: mismo concepto que 'time_spent_at_sea_through_ice_hours' bajo un rótulo de grupo distinto según el año; sus valores ya se han volcado en 'time_spent_at_sea_through_ice_hours' cuando esta estaba vacía — usar la columna canónica para el análisis]
+verifier_accreditation_number,Verifier Accreditation number
+verifier_address,Verifier Address
+verifier_city,Verifier City
+verifier_country,Verifier Country
+verifier_nab,Verifier NAB
+verifier_name,Verifier Name
+verifier_number,Verifier Number

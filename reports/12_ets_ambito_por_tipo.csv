@@ -1,0 +1,16 @@
+ship_type_agrupado,n,f_ets_mediano
+Bulk carrier,4774,0.53
+Chemical tanker,1615,0.591
+Combination carrier,4,0.538
+Container ship,2361,0.556
+Container/ro-ro cargo ship,67,0.602
+Gas carrier,413,0.53
+General cargo ship,2828,0.584
+LNG carrier,406,0.51
+Oil tanker,1997,0.555
+Other ship types,928,0.635
+Passenger ship,239,0.777
+Refrigerated cargo carrier,125,0.525
+Ro-pax ship,415,0.688
+Ro-ro ship,237,0.57
+Vehicle carrier,530,0.547

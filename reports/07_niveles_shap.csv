@@ -1,0 +1,11 @@
+variable,1. principal,2. tamano,3. operacional,4. operacional + tamano
+Horas en el mar,37.6,45.3,38.5,39.4
+Velocidad media,0.0,0.0,28.5,26.9
+Capacidad de carga,0.0,28.3,0.0,18.5
+Tipo de buque,41.6,18.8,17.4,6.6
+Carga movida en el año,0.0,0.0,0.0,2.9
+Eficiencia técnica (EEDI/EIV),10.8,4.0,8.7,2.7
+Método de eficiencia,6.1,2.4,4.7,2.2
+Proporción de missings,0.7,0.6,0.6,0.5
+Clase de hielo,3.2,0.5,1.5,0.2
+Subcategoría nueva de EMSA,0.1,0.1,0.0,0.0

@@ -1,0 +1,83 @@
+# ---------------------------------------------------------------------------------------------
+# Entorno del TFM "Prediccion de emisiones de CO2 de buques" (THETIS-MRV)
+#
+# Las once librerias de las que dependen las cifras del trabajo van FIJADAS con == y no con >=.
+# La pila de servicio (fastapi, uvicorn, pydantic, httpx) va sin version aqui y queda fijada en
+# requirements-lock.txt, que es el fichero que reconstruye el entorno identico. Varios resultados
+# (el recorte a cero de las predicciones, el tratamiento nativo de NaN de XGBoost y la activacion
+# de la capa de salida de Keras) dependen del comportamiento concreto de una version de libreria:
+# con estas versiones exactas el proyecto reproduce sus cifras digito a digito; con otras, no esta
+# garantizado.
+#
+# Son las versiones con las que se generaron todos los artefactos de data/processed/, models/ y
+# reports/, y los propios artefactos las llevan grabadas en sus metadatos.
+#
+# Entorno del proyecto: conda `tfm`, Python 3.11.15. Se crea desde cero con:
+#
+#     conda create -n tfm python=3.11 -y
+#     conda activate tfm
+#     pip install -r requirements.txt
+#
+# `requirements-lock.txt` (163 paquetes, incluidas las transitivas) es el `pip freeze` de ese
+# entorno y permite reconstruirlo identico, no solo equivalente.
+#
+# Para arrancar la API, usar `python -m uvicorn` y no `uvicorn` a secas: el ejecutable suelto usa
+# el primer Python del PATH y puede fallar con un ModuleNotFoundError.
+# ---------------------------------------------------------------------------------------------
+
+# --- Nucleo de datos y modelizacion -----------------------------------------------------------
+numpy==2.4.4
+pandas==3.0.2
+pyarrow==25.0.1          # motor de lectura/escritura de los .parquet de data/processed/
+scipy==1.17.1
+scikit-learn==1.8.0      # particiones, metricas, GridSearchCV, permutation_importance, SVM
+statsmodels==0.14.6      # modelo lineal de referencia (src/FuncionesMineria.py)
+xgboost==3.2.0           # modelo de trabajo del TFM
+
+# --- Deep learning (notebook 05) --------------------------------------------------------------
+# La reproducibilidad digito a digito del notebook 05 esta comprobada con estas dos, en Windows
+# y en Linux.
+tensorflow==2.21.0
+keras==3.15.1
+keras-tuner
+
+# Serializacion del preproceso de las redes (models/preproceso_dl*.joblib)
+joblib
+
+# --- Interpretabilidad (notebook 07) ----------------------------------------------------------
+# SHAP se contrasta siempre contra la importancia por total_gain y por permutacion.
+# Version sin fijar a proposito: es la unica libreria del proyecto cuya version cambia el
+# resultado visible (el dibujo del beeswarm) sin cambiar ni una cifra. Los tres rankings de
+# importancia salen identicos entre versiones.
+shap
+
+# --- Visualizacion ----------------------------------------------------------------------------
+matplotlib==3.10.9
+seaborn==0.13.2
+plotly
+
+# --- Productivizacion (API / simulador) -------------------------------------------------------
+fastapi
+uvicorn
+pydantic
+httpx                    # cliente HTTP de la pila de servicio
+
+# --- NoSQL (notebook 10) y big data (notebook 11) ---------------------------------------------
+# Las dos entran para un notebook cada una y ninguna toca el modelo ni la API.
+mongomock                # notebook 10: implementa la API de pymongo en memoria, asi que el cuaderno
+                         # se ejecuta sin levantar un servidor MongoDB. El codigo de consulta es el
+                         # mismo que contra un servidor real; el despliegue va por mongoimport con
+                         # data/processed/pasaportes.jsonl, que el propio cuaderno escribe.
+pyspark                  # notebook 11: comparativa medida contra pandas. Necesita un JDK 11 o 17
+                         # instalado y JAVA_HOME apuntando a el.
+
+# --- Notebooks --------------------------------------------------------------------------------
+jupyter
+ipykernel
+nbconvert                # para reejecutar los notebooks sin abrirlos:
+                         #   jupyter nbconvert --to notebook --execute --inplace notebooks/XX.ipynb
+
+# --- Utilidades -------------------------------------------------------------------------------
+openpyxl                 # lectura de los .xlsx crudos de THETIS-MRV
+requests
+python-dotenv

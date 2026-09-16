@@ -1,0 +1,2624 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estela · centro de control de flota</title>
+<meta name="description" content="Predicción, explicación y simulación de las emisiones de CO₂ de la flota que declara al registro europeo THETIS-MRV.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%230a68c4%22%2F%3E%3Cpath%20d%3D%22M5%2021c3.4%200%203.4-3.2%206.8-3.2S15.2%2021%2018.6%2021s3.4-3.2%206.8-3.2%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.9%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M16%206.4l4.7%208.8h-9.4z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E">
+<style>
+/* ==================================================================================================
+   ESTELA — hoja de estilo del centro de control.
+
+   Cuatro reglas que ordenan todo lo demás:
+
+   1. **Una sola magnitud, un solo color.** El azul es "dato"; el gris, "contexto". Nunca se usan dos
+      colores para distinguir dos series si una etiqueta directa puede hacerlo. La única paleta
+      categórica es la escala CII (A-E), que es de ESTADO —cinco niveles ordenados de una
+      calificación regulatoria— y lleva SIEMPRE la letra dentro de la marca, porque un semáforo
+      verde-rojo no supera por sí solo la separación por daltonismo.
+   2. **El color nunca porta significado solo.** Toda barra, sector, sello y anillo lleva su valor
+      escrito al lado.
+   3. **Densidad con jerarquía.** Es un cuadro de mando: los paneles viven en una rejilla de doce
+      columnas y cada uno declara cuánto ocupa. Lo que se mira primero ocupa más.
+   4. **Nada se explica en un manual.** Cada panel dice en una línea qué contesta y cada término
+      regulatorio (CII, ETS, FuelEU) es un botón que se explica al tocarlo.
+   ================================================================================================== */
+
+:root {
+  color-scheme: light;
+
+  --papel:        #eeefec;
+  --carta:        #ffffff;
+  --carta-2:      #f7f8f6;
+  --realce:       #eef1f5;
+  --rail:         #10151c;
+  --rail-tinta:   #e8ecf1;
+  --rail-tinta-2: #8d9aa8;
+  --rail-linea:   rgba(255,255,255,.09);
+
+  --tinta:        #0b1016;
+  --tinta-2:      #4b5663;
+  --tinta-3:      #808b97;
+
+  --linea:        #e3e5e1;
+  --linea-fuerte: #cfd2cd;
+  --borde:        rgba(11,16,22,.11);
+
+  --acento:       #0a68c4;
+  --acento-2:     #084f97;
+  --acento-3:     #4f9ded;
+  --acento-tenue: #e3eefb;
+
+  --verde:        #0a7a4a;
+  --verde-2:      #34a06e;
+  --verde-tenue:  #e0f3e9;
+  --ambar:        #a96c05;
+  --ambar-tenue:  #fbeed5;
+  --rojo:         #bd3b2f;
+  --rojo-tenue:   #fbe6e3;
+
+  --neutro:       #b7bcb8;
+  --neutro-2:     #d6d9d5;
+
+  --cii-a:        #0c8f3f;
+  --cii-b:        #64b23a;
+  --cii-c:        #d9a400;
+  --cii-d:        #e07a3c;
+  --cii-e:        #cf4436;
+
+  --sombra:       0 1px 1px rgba(11,16,22,.035), 0 4px 14px -6px rgba(11,16,22,.10);
+  --sombra-alta:  0 2px 4px rgba(11,16,22,.06), 0 20px 48px -18px rgba(11,16,22,.30);
+  --radio:        13px;
+  --radio-s:      9px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-tema="claro"])) {
+    color-scheme: dark;
+    --papel:        #0a0e13;
+    --carta:        #141a22;
+    --carta-2:      #19212a;
+    --realce:       #1e2731;
+    --rail:         #0d1218;
+    --rail-tinta:   #eaeef3;
+    --rail-tinta-2: #7e8b99;
+    --rail-linea:   rgba(255,255,255,.07);
+    --tinta:        #eff3f7;
+    --tinta-2:      #a6b2bd;
+    --tinta-3:      #76808c;
+    --linea:        #232b35;
+    --linea-fuerte: #313a45;
+    --borde:        rgba(255,255,255,.08);
+    --acento:       #4a9ef2;
+    --acento-2:     #8dc6fb;
+    --acento-3:     #2b6fb5;
+    --acento-tenue: #102a44;
+    --verde:        #3fca8b;
+    --verde-2:      #2b9b68;
+    --verde-tenue:  #0d3626;
+    --ambar:        #e2a33c;
+    --ambar-tenue:  #38290c;
+    --rojo:         #f07264;
+    --rojo-tenue:   #3a1915;
+    --neutro:       #48525d;
+    --neutro-2:     #2d3640;
+    --cii-a:        #2cbe5f;
+    --cii-b:        #7fd155;
+    --cii-c:        #e8bc2a;
+    --cii-d:        #ef9257;
+    --cii-e:        #f06457;
+    --sombra:       0 1px 1px rgba(0,0,0,.4), 0 6px 20px -10px rgba(0,0,0,.65);
+    --sombra-alta:  0 2px 6px rgba(0,0,0,.5), 0 24px 56px -20px rgba(0,0,0,.85);
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--papel); color: var(--tinta);
+  font: 14.5px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+[hidden] { display: none !important; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; border-radius: 6px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ==================================================================================================
+   ARMAZÓN — raíl fijo a la izquierda, lienzo a la derecha
+   ================================================================================================== */
+/* El raíl es `sticky` y mide una pantalla, así que por debajo asomaría el papel. El fondo de la
+   columna lo pinta el propio contenedor: así la banda oscura llega hasta el pie sin duplicar nodos. */
+.app {
+  display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh;
+  background: linear-gradient(90deg, var(--rail) 0 240px, var(--papel) 240px);
+}
+
+.rail {
+  background: var(--rail); color: var(--rail-tinta);
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 18px 14px; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+.rail-marca { display: flex; align-items: center; gap: 10px; padding: 2px 6px 18px; }
+.rail-marca svg { display: block; flex: none; }
+.rail-txt b { font-size: 16.5px; font-weight: 640; letter-spacing: -.015em; display: block; line-height: 1.1; }
+.rail-txt span { font-size: 10.5px; color: var(--rail-tinta-2); letter-spacing: .06em; text-transform: uppercase; }
+
+.rail-rotulo {
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--rail-tinta-2);
+  padding: 14px 8px 6px; font-weight: 600;
+}
+.rail-nav { display: flex; flex-direction: column; gap: 2px; }
+.rail-nav button {
+  appearance: none; background: none; border: 0; cursor: pointer; width: 100%;
+  display: flex; align-items: center; gap: 11px; padding: 9px 10px; border-radius: 8px;
+  color: var(--rail-tinta-2); font-size: 14px; text-align: left; transition: background .15s, color .15s;
+}
+.rail-nav button:hover { background: rgba(255,255,255,.06); color: var(--rail-tinta); }
+.rail-nav button[aria-selected="true"] { background: var(--acento); color: #fff; font-weight: 550; }
+.rail-nav svg { flex: none; opacity: .85; }
+
+.rail-tarjeta {
+  margin-top: 8px; background: rgba(255,255,255,.045); border: 1px solid var(--rail-linea);
+  border-radius: 10px; padding: 12px;
+}
+.rail-tarjeta .n { font-size: 14px; font-weight: 600; line-height: 1.25; margin-bottom: 6px; }
+.rail-tarjeta .m { font-size: 11.5px; color: var(--rail-tinta-2); font-variant-numeric: tabular-nums; }
+.rail-tarjeta .cambiar {
+  appearance: none; background: rgba(255,255,255,.08); border: 0; border-radius: 7px; cursor: pointer;
+  color: var(--rail-tinta); font-size: 12px; padding: 6px 10px; margin-top: 10px; width: 100%;
+}
+.rail-tarjeta .cambiar:hover { background: rgba(255,255,255,.15); }
+
+.rail-pie { margin-top: auto; padding-top: 16px; font-size: 11px; color: var(--rail-tinta-2); line-height: 1.45; }
+.rail-pie .luz { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; color: var(--rail-tinta); font-size: 11.5px; }
+.rail-pie .luz i {
+  width: 7px; height: 7px; border-radius: 50%; background: #35d07f;
+  box-shadow: 0 0 0 3px rgba(53,208,127,.18); flex: none;
+}
+.rail-pie a { color: var(--rail-tinta-2); }
+
+.lienzo { padding: 0 22px 44px; min-width: 0; }
+
+/* -------------------------------------------------- cabecera de sección --------------------- */
+.cabecera {
+  position: sticky; top: 0; z-index: 30; padding: 18px 0 14px;
+  background: linear-gradient(180deg, var(--papel) 72%, transparent);
+  display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap;
+}
+.cabecera h1 { font-size: 20px; font-weight: 640; margin: 0 0 2px; letter-spacing: -.02em; }
+.cabecera p { margin: 0; font-size: 13px; color: var(--tinta-2); max-width: 70ch; }
+.cabecera .der { margin-left: auto; display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+.chip {
+  font-size: 11.5px; color: var(--tinta-2); background: var(--carta);
+  border: 1px solid var(--borde); border-radius: 999px; padding: 4px 11px; white-space: nowrap;
+}
+
+/* -------------------------------------------------- rejilla de paneles ---------------------- */
+/* Igualar la altura dentro de cada fila es lo que hace que esto se lea como un cuadro de mando y no
+   como una pila de fichas: el ojo recorre una retícula, no una escalera. El pie de cada panel se ancla
+   abajo para que las líneas horizontales coincidan entre paneles vecinos. */
+.tablero { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+.sp3 { grid-column: span 3; } .sp4 { grid-column: span 4; } .sp5 { grid-column: span 5; }
+.sp6 { grid-column: span 6; } .sp7 { grid-column: span 7; } .sp8 { grid-column: span 8; }
+.sp9 { grid-column: span 9; } .sp12 { grid-column: span 12; }
+/* Un panel cuyo contenido tiene longitud imprevisible no se estira: preferible un borde inferior
+   desigual a una tarjeta con trescientos píxeles de vacío dentro. */
+.libre { align-self: start; }
+@media (max-width: 1240px) {
+  .sp3 { grid-column: span 6; } .sp4 { grid-column: span 6; } .sp5 { grid-column: span 12; }
+  .sp7 { grid-column: span 12; } .sp8 { grid-column: span 12; } .sp9 { grid-column: span 12; }
+}
+@media (max-width: 760px) { .tablero > * { grid-column: span 12 !important; } }
+
+.panel {
+  background: var(--carta); border: 1px solid var(--borde); border-radius: var(--radio);
+  box-shadow: var(--sombra); overflow: hidden; min-width: 0;
+  display: flex; flex-direction: column;
+}
+.panel-cab { padding: 14px 16px 0; }
+.panel-cab h2 {
+  font-size: 13px; font-weight: 620; margin: 0; letter-spacing: -.003em;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.panel-cab h2 .conteo {
+  font-weight: 500; font-size: 11px; color: var(--tinta-3);
+  background: var(--realce); border-radius: 999px; padding: 2px 8px;
+}
+.panel-cab p { margin: 4px 0 0; font-size: 12px; color: var(--tinta-3); line-height: 1.45; }
+.panel-cuerpo { padding: 14px 16px 16px; flex: 1 1 auto; min-height: 0; }
+.panel-pie {
+  margin-top: auto; padding: 11px 16px; border-top: 1px solid var(--linea); background: var(--carta-2);
+  font-size: 11.5px; color: var(--tinta-2); line-height: 1.45;
+}
+.panel-pie b { color: var(--tinta); }
+.cargando { opacity: .4; transition: opacity .18s ease; }
+
+/* -------------------------------------------------- panel destacado ------------------------- */
+.panel.foco {
+  background:
+    radial-gradient(130% 170% at 92% -40%, color-mix(in srgb, var(--acento) 18%, transparent) 0%, transparent 60%),
+    linear-gradient(180deg, var(--carta) 0%, var(--carta-2) 100%);
+  box-shadow: var(--sombra-alta); position: relative;
+}
+.ondas { position: absolute; inset: auto 0 0 0; height: 62%; pointer-events: none; opacity: .55; }
+.foco .panel-cuerpo { position: relative; }
+.rotulo {
+  font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--tinta-3);
+  font-weight: 620; display: block; margin-bottom: 8px;
+}
+.cifrón { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
+.cifrón .n { font-size: clamp(40px, 5.4vw, 62px); font-weight: 660; line-height: .92; letter-spacing: -.04em; }
+.cifrón .u { font-size: 16px; font-weight: 520; color: var(--tinta-2); letter-spacing: -.005em; }
+.delta {
+  font-size: 12.5px; font-weight: 580; color: var(--verde); background: var(--verde-tenue);
+  border-radius: 999px; padding: 3px 10px; align-self: center; white-space: nowrap;
+}
+.delta.negativo { color: var(--rojo); background: var(--rojo-tenue); }
+.frase { font-size: 14px; line-height: 1.45; margin: 14px 0 0; color: var(--tinta-2); max-width: 56ch; }
+.frase b { color: var(--tinta); font-weight: 600; }
+
+/* -------------------------------------------------- teselas KPI ----------------------------- */
+.tesela { padding: 13px 15px 14px; }
+.tesela .r { font-size: 11px; color: var(--tinta-3); display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.tesela .v {
+  font-size: 25px; font-weight: 620; letter-spacing: -.025em; font-variant-numeric: tabular-nums;
+  display: block; line-height: 1.1;
+}
+.tesela .v small { font-size: 13px; font-weight: 520; color: var(--tinta-2); letter-spacing: 0; margin-left: 3px; }
+.tesela .a { font-size: 11.5px; color: var(--tinta-3); display: block; margin-top: 4px; line-height: 1.4; }
+.pilaKPI { display: grid; gap: 1px; background: var(--linea); flex: 1 1 auto; align-content: stretch; }
+/* Las tiras horizontales de teselas se reparten en dos columnas antes de apretar el texto, y en una
+   sola en el móvil. El número de columnas va en clases y no en el atributo `style`, para que una
+   media query pueda corregirlo. */
+.pilaKPI.tira5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.pilaKPI.tira3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1180px) { .pilaKPI.tira5 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 820px) { .pilaKPI.tira5, .pilaKPI.tira3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .pilaKPI.tira5, .pilaKPI.tira3 { grid-template-columns: 1fr; } }
+.pilaKPI > div { background: var(--carta); }
+
+/* -------------------------------------------------- controles ------------------------------- */
+.mandos { display: grid; grid-template-columns: minmax(280px, 1.1fr) minmax(240px, 1fr); gap: 18px 26px; align-items: start; }
+@media (max-width: 900px) { .mandos { grid-template-columns: 1fr; } }
+.presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.preset {
+  appearance: none; cursor: pointer; border: 1px solid var(--linea-fuerte); background: var(--carta);
+  border-radius: 8px; padding: 7px 11px; font-size: 12.5px; color: var(--tinta-2);
+  display: inline-flex; flex-direction: column; gap: 1px; line-height: 1.25;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.preset .pp { font-size: 10.5px; opacity: .8; font-variant-numeric: tabular-nums; }
+.preset:hover { border-color: var(--acento); color: var(--tinta); }
+.preset[aria-pressed="true"] {
+  background: var(--acento); border-color: var(--acento); color: #fff; font-weight: 560;
+}
+.preset[aria-pressed="true"] .pp { opacity: .85; }
+
+.campo .lin { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; gap: 10px; }
+.campo label { font-size: 12.5px; color: var(--tinta-2); }
+.campo .val { font-size: 13.5px; font-weight: 620; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 20px; background: none; cursor: pointer; margin: 0; }
+input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: var(--linea-fuerte); }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--carta);
+  border: 2px solid var(--acento); margin-top: -6px; box-shadow: 0 1px 4px rgba(0,0,0,.22); transition: transform .12s;
+}
+input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.16); }
+input[type="range"]::-moz-range-track { height: 4px; border-radius: 999px; background: var(--linea-fuerte); }
+input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border-radius: 50%; background: var(--carta); border: 2px solid var(--acento); }
+.escala { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--tinta-3); }
+
+select, input[type="text"] {
+  width: 100%; background: var(--carta); color: var(--tinta); border: 1px solid var(--linea-fuerte);
+  border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 13.5px;
+}
+select:hover, input[type="text"]:hover { border-color: var(--tinta-3); }
+.ajustes { display: flex; gap: 9px; flex-wrap: wrap; align-items: flex-end; }
+.ajustes .campo { min-width: 130px; flex: 1 1 130px; }
+.ajustes .campo > label { display: block; margin-bottom: 4px; font-size: 11px; color: var(--tinta-3); }
+.boton {
+  appearance: none; cursor: pointer; border: 1px solid var(--linea-fuerte); background: var(--carta);
+  border-radius: 8px; padding: 8px 13px; font-size: 13px; color: var(--tinta-2);
+}
+.boton:hover { border-color: var(--tinta-3); color: var(--tinta); }
+
+/* -------------------------------------------------- barras ---------------------------------- */
+.barras { display: flex; flex-direction: column; gap: 5px; }
+/* Cuando el panel vecino es más alto, las barras reparten el hueco en vez de dejar un vacío al pie:
+   la retícula se mantiene y la lectura no cambia, porque la longitud sigue siendo proporcional. */
+.cuerpo-flex { display: flex; flex-direction: column; }
+.barras.reparte { flex: 1 1 auto; justify-content: space-between; gap: 6px; }
+.barras.reparte .pista { height: auto; min-height: 22px; }
+
+/* Comparación compacta entre la operación de hoy y la del plan, dentro del panel destacado. */
+.comparativa { display: grid; gap: 7px; margin-top: 18px; max-width: 400px; }
+.comparativa .c-fila { display: grid; grid-template-columns: var(--nom, 86px) minmax(0,1fr) auto; gap: 10px; align-items: center; }
+.comparativa .c-nom { font-size: 11.5px; color: var(--tinta-3); }
+.comparativa .c-pista { height: 8px; border-radius: 999px; background: var(--linea); overflow: hidden; }
+.comparativa .c-pista i { display: block; height: 100%; border-radius: 999px; background: var(--neutro); transition: width .6s cubic-bezier(.22,.9,.3,1); }
+.comparativa .c-fila.act .c-pista i { background: var(--acento); }
+.comparativa .c-val { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--tinta-2); white-space: nowrap; }
+.comparativa .c-fila.act .c-val { color: var(--tinta); font-weight: 600; }
+.barra { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 10px; align-items: center; padding: 2px 0; border-radius: 6px; }
+.barra:hover { background: var(--realce); }
+.barra .nom { font-size: 12.5px; color: var(--tinta-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pista { position: relative; height: 24px; display: flex; align-items: center; min-width: 0; }
+.relleno { height: 18px; border-radius: 4px; background: var(--acento); min-width: 3px; transition: width .55s cubic-bezier(.22,.9,.3,1); }
+.relleno.gris { background: var(--neutro); }
+.relleno.verde { background: var(--verde); }
+.pista .v { margin-left: 8px; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--tinta-2); white-space: nowrap; }
+.pista .v b { color: var(--tinta); font-weight: 620; }
+@media (max-width: 560px) { .barra { grid-template-columns: 104px minmax(0,1fr); } .barra .nom { font-size: 11.5px; } }
+
+/* -------------------------------------------------- duelo ----------------------------------- */
+.duelo { display: grid; gap: 10px; }
+.duelo-fila { border: 1px solid var(--linea); border-radius: var(--radio-s); padding: 13px 15px; background: var(--carta-2); }
+.duelo-fila.gana { border-color: var(--acento); background: color-mix(in srgb, var(--acento) 7%, var(--carta)); }
+.duelo-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.duelo-cab .t { font-size: 13px; font-weight: 570; }
+.duelo-cab .c { font-size: 18px; font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.duelo-cab .c small { font-size: 12px; font-weight: 500; color: var(--tinta-2); }
+.duelo-pista { height: 9px; border-radius: 999px; background: var(--linea); overflow: hidden; }
+.duelo-pista i { display: block; height: 100%; border-radius: 999px; background: var(--neutro); transition: width .6s cubic-bezier(.22,.9,.3,1); }
+.duelo-fila.gana .duelo-pista i { background: var(--acento); }
+.duelo-fila .d { font-size: 11.5px; color: var(--tinta-3); margin-top: 6px; }
+
+/* -------------------------------------------------- anillo / donut -------------------------- */
+.donut { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.cuerpo-centro { display: flex; align-items: center; }
+.cuerpo-centro > * { width: 100%; }
+.donut svg { flex: none; }
+.donut .centro { font-variant-numeric: tabular-nums; }
+.donut-ley { display: flex; flex-direction: column; gap: 8px; min-width: 0; flex: 1 1 150px; }
+.donut-ley div { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; }
+.donut-ley i { width: 9px; height: 9px; border-radius: 3px; flex: none; align-self: center; }
+.donut-ley .e { color: var(--tinta-2); flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.donut-ley .c { font-weight: 620; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.donut-ley .p { color: var(--tinta-3); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* -------------------------------------------------- área / curva ---------------------------- */
+.grafico { width: 100%; display: block; }
+.grafico .malla { stroke: var(--linea); stroke-width: 1; }
+.grafico .eje { fill: var(--tinta-3); font-size: 10.5px; font-variant-numeric: tabular-nums; }
+.grafico .linea { fill: none; stroke: var(--acento); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.grafico .punto { fill: var(--carta); stroke: var(--acento); stroke-width: 2.4; }
+.grafico .punto.act { fill: var(--acento); }
+.grafico .etiq { fill: var(--tinta); font-size: 11.5px; font-weight: 620; font-variant-numeric: tabular-nums; }
+.grafico .zona { cursor: crosshair; }
+
+/* -------------------------------------------------- CII ------------------------------------- */
+.cii { --tono: var(--neutro); }
+.cii-a { --tono: var(--cii-a); } .cii-b { --tono: var(--cii-b); } .cii-c { --tono: var(--cii-c); }
+.cii-d { --tono: var(--cii-d); } .cii-e { --tono: var(--cii-e); }
+.sello {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px;
+  padding: 0 6px; border-radius: 6px; font-size: 14px; font-weight: 680; line-height: 1; color: var(--tinta);
+  background: color-mix(in srgb, var(--tono) 20%, var(--carta)); border: 1px solid var(--tono);
+  border-left-width: 4px; font-variant-numeric: tabular-nums;
+}
+.sello.grande { min-width: 60px; height: 60px; font-size: 34px; border-radius: 12px; border-left-width: 7px; }
+/* Ficha técnica: los cuatro datos que sitúan al buque frente a sus pares. Van en definición y no en
+   tabla porque son pares clave-valor de un solo sujeto, no filas comparables entre sí. */
+.ficha { margin: 14px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0; font-size: 12.5px; }
+.ficha dt { color: var(--tinta-3); padding: 7px 14px 7px 0; border-bottom: 1px solid var(--linea); white-space: nowrap; }
+.ficha dd {
+  margin: 0; padding: 7px 0; border-bottom: 1px solid var(--linea); text-align: right;
+  font-variant-numeric: tabular-nums; color: var(--tinta);
+}
+.ficha dt:last-of-type, .ficha dd:last-of-type { border-bottom: 0; }
+
+.trayecto { display: flex; gap: 5px; flex-wrap: wrap; }
+.trayecto .paso {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  border: 1px solid var(--borde); border-radius: 8px; padding: 6px 9px; background: var(--carta-2);
+}
+.trayecto .paso .a { font-size: 10px; color: var(--tinta-3); font-variant-numeric: tabular-nums; }
+.trayecto .paso .l {
+  width: 22px; height: 22px; border-radius: 5px; display: grid; place-items: center; font-size: 13px; font-weight: 660;
+  background: color-mix(in srgb, var(--tono) 22%, var(--carta)); border: 1px solid var(--tono);
+}
+.trayecto .paso.cambia { box-shadow: 0 0 0 2px color-mix(in srgb, var(--rojo) 32%, transparent); }
+.leyenda { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 9px; font-size: 11px; color: var(--tinta-3); }
+.leyenda span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 2px; background: var(--tono); margin-right: 5px; }
+.pilaCII { display: flex; height: 30px; border-radius: 7px; overflow: hidden; border: 1px solid var(--borde); }
+.pilaCII i {
+  display: grid; place-items: center; font-size: 11.5px; font-weight: 620; background: var(--tono);
+  min-width: 0; color: #14130f; transition: flex-grow .5s ease;
+}
+.pilaCII i.cii-e { color: #fff; }
+
+.pastilla {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 550;
+  border-radius: 999px; padding: 3px 9px; white-space: nowrap; background: var(--realce); color: var(--tinta-2);
+}
+.pastilla.mal { background: var(--rojo-tenue); color: var(--rojo); }
+.pastilla.ojo { background: var(--ambar-tenue); color: var(--ambar); }
+.pastilla.bien { background: var(--verde-tenue); color: var(--verde); }
+
+/* -------------------------------------------------- listas / tablas ------------------------- */
+.lista { display: flex; flex-direction: column; }
+.item {
+  display: grid; grid-template-columns: 22px minmax(0,1fr) auto; gap: 11px; align-items: center; width: 100%;
+  text-align: left; appearance: none; background: none; border: 0; cursor: pointer;
+  padding: 9px 8px; border-radius: 8px; border-bottom: 1px solid var(--linea); transition: background .13s;
+}
+.item:last-child { border-bottom: 0; }
+.item:hover { background: var(--realce); }
+.item .rank { font-size: 11px; color: var(--tinta-3); font-variant-numeric: tabular-nums; text-align: right; }
+.item .cuerpo { min-width: 0; }
+.item .t1 { font-size: 13.5px; font-weight: 560; display: flex; align-items: center; gap: 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item .t2 { display: block; font-size: 11.5px; color: var(--tinta-3); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item .der { text-align: right; }
+.item .der .p { display: block; font-size: 13.5px; font-weight: 620; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.item .der .s { display: block; font-size: 11px; color: var(--tinta-3); font-variant-numeric: tabular-nums; }
+.mini { height: 3px; border-radius: 999px; background: var(--linea); margin-top: 6px; overflow: hidden; }
+.mini i { display: block; height: 100%; background: var(--acento); border-radius: 999px; transition: width .5s ease; }
+
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+th, td { text-align: right; padding: 7px 9px; border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; font-variant-numeric: normal; }
+th { color: var(--tinta-3); font-weight: 550; font-size: 10.5px; letter-spacing: .03em; text-transform: uppercase; }
+tbody tr:hover { background: var(--realce); }
+.desliza { overflow-x: auto; }
+.alta { max-height: 340px; overflow: auto; border: 1px solid var(--linea); border-radius: var(--radio-s); }
+.alta thead th { position: sticky; top: 0; z-index: 2; background: var(--carta); box-shadow: inset 0 -1px 0 var(--linea-fuerte); user-select: none; cursor: pointer; }
+.alta tbody tr:last-child td { border-bottom: 0; }
+
+/* -------------------------------------------------- buscador -------------------------------- */
+.buscador { position: relative; }
+.buscador input { padding-left: 33px; }
+.buscador .lupa { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--tinta-3); display: flex; }
+.sugerencias {
+  position: absolute; z-index: 40; left: 0; right: 0; top: calc(100% + 5px); background: var(--carta);
+  border: 1px solid var(--borde); border-radius: var(--radio-s); box-shadow: var(--sombra-alta);
+  overflow: hidden; max-height: 320px; overflow-y: auto;
+}
+.sugerencia { display: block; width: 100%; text-align: left; appearance: none; background: none; border: 0; cursor: pointer; padding: 9px 12px; border-bottom: 1px solid var(--linea); }
+.sugerencia:last-child { border-bottom: 0; }
+.sugerencia:hover { background: var(--acento-tenue); }
+.sugerencia .a { font-size: 13.5px; font-weight: 550; }
+.sugerencia .b { font-size: 11.5px; color: var(--tinta-3); margin-top: 1px; }
+
+/* -------------------------------------------------- diálogo --------------------------------- */
+.velo {
+  position: fixed; inset: 0; z-index: 60; background: rgba(8,12,16,.5); backdrop-filter: blur(3px);
+  display: grid; place-items: start center; padding: 12vh 20px 20px;
+}
+.dialogo { width: min(560px, 100%); background: var(--carta); border: 1px solid var(--borde); border-radius: var(--radio); box-shadow: var(--sombra-alta); padding: 18px; }
+.dialogo h3 { margin: 0 0 4px; font-size: 15px; font-weight: 620; }
+.dialogo p { margin: 0 0 14px; font-size: 12.5px; color: var(--tinta-3); }
+
+/* -------------------------------------------------- avisos ---------------------------------- */
+.aviso {
+  font-size: 12px; color: var(--tinta-2); background: var(--carta-2); border: 1px solid var(--linea);
+  border-left: 3px solid var(--acento-3); border-radius: 0 var(--radio-s) var(--radio-s) 0;
+  padding: 10px 13px; margin-top: 12px; line-height: 1.5;
+}
+.aviso b { color: var(--tinta); }
+.aviso.ojo { border-left-color: var(--ambar); }
+.termino { appearance: none; background: none; border: 0; padding: 0; cursor: help; color: inherit; border-bottom: 1px dashed var(--tinta-3); font: inherit; }
+.termino:hover { color: var(--acento); border-bottom-color: var(--acento); }
+
+#globo {
+  position: fixed; pointer-events: none; opacity: 0; transition: opacity .12s ease; background: var(--carta);
+  border: 1px solid var(--borde); border-radius: 9px; box-shadow: var(--sombra-alta); padding: 9px 12px;
+  font-size: 12px; color: var(--tinta); z-index: 90; max-width: 290px; line-height: 1.45;
+}
+#globo b { font-weight: 620; }
+#globo .g { display: block; color: var(--tinta-2); font-variant-numeric: tabular-nums; margin-top: 3px; }
+
+.esq { background: linear-gradient(90deg, var(--realce) 25%, var(--linea) 37%, var(--realce) 63%); background-size: 400% 100%; animation: brilla 1.3s ease infinite; border-radius: 6px; color: transparent !important; }
+@keyframes brilla { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+.vacio { color: var(--tinta-3); font-size: 12.5px; padding: 16px 0; text-align: center; }
+
+.pie-legal { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--linea); font-size: 11.5px; color: var(--tinta-3); }
+.pie-legal a { color: var(--tinta-2); }
+
+
+/* -------------------------------------------------- portada / objetivos --------------------- */
+/* Las tres tarjetas de objetivo son la primera pantalla: quien abre esto por primera vez tiene que
+   entender en cinco segundos qué hace la herramienta y qué se demuestra con ella. Por eso son
+   botones y no texto: enseñan el resultado y llevan a la sección donde se comprueba. */
+.objetivos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 980px) { .objetivos { grid-template-columns: 1fr; } }
+.objetivo {
+  appearance: none; text-align: left; cursor: pointer; width: 100%;
+  background: var(--carta); border: 1px solid var(--borde); border-radius: var(--radio);
+  box-shadow: var(--sombra); padding: 18px 20px 16px; display: flex; flex-direction: column; gap: 8px;
+  transition: border-color .18s, transform .18s, box-shadow .18s;
+}
+.objetivo:hover { border-color: var(--acento); transform: translateY(-2px); box-shadow: var(--sombra-alta); }
+.objetivo .ord {
+  width: 26px; height: 26px; border-radius: 8px; background: var(--acento-tenue); color: var(--acento-2);
+  display: grid; place-items: center; font-size: 12.5px; font-weight: 680;
+}
+.objetivo h3 { margin: 0; font-size: 14px; font-weight: 620; }
+.objetivo .cifra {
+  font-size: 30px; font-weight: 660; letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1.05;
+}
+.objetivo .cifra small { font-size: 14px; font-weight: 520; color: var(--tinta-2); letter-spacing: 0; }
+.objetivo p { margin: 0; font-size: 12.5px; color: var(--tinta-2); line-height: 1.5; }
+.objetivo .ir { margin-top: auto; font-size: 12px; color: var(--acento); font-weight: 550; }
+
+/* -------------------------------------------------- banderas -------------------------------- */
+.bandera { font-size: 17px; line-height: 1; width: 24px; display: inline-block; text-align: center; }
+.bloque-barra { display: flex; height: 34px; border-radius: 8px; overflow: hidden; border: 1px solid var(--borde); }
+.bloque-barra i {
+  display: grid; place-items: center; font-size: 11.5px; font-weight: 600; color: #fff;
+  min-width: 0; transition: flex-grow .55s ease; padding: 0 8px; white-space: nowrap; overflow: hidden;
+}
+
+/* -------------------------------------------------- selector de nivel ----------------------- */
+.niveles-sel { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 14px; }
+.niveles-sel button {
+  appearance: none; cursor: pointer; border: 1px solid var(--linea-fuerte); background: var(--carta);
+  border-radius: 8px; padding: 7px 12px; font-size: 12.5px; color: var(--tinta-2);
+  display: flex; flex-direction: column; gap: 1px; line-height: 1.25; transition: all .15s;
+}
+.niveles-sel button .r2 { font-size: 10.5px; opacity: .8; font-variant-numeric: tabular-nums; }
+.niveles-sel button:hover { border-color: var(--acento); color: var(--tinta); }
+.niveles-sel button[aria-pressed="true"] { background: var(--acento); border-color: var(--acento); color: #fff; font-weight: 560; }
+.niveles-sel button[aria-pressed="true"] .r2 { opacity: .9; }
+
+/* Escalera de R²: cada peldaño es lo que vale una pieza de información más. */
+.escalera { display: flex; flex-direction: column; gap: 9px; }
+.escalera .peldano { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.escalera .et { font-size: 12.5px; color: var(--tinta-2); }
+.escalera .et b { color: var(--tinta); font-weight: 600; }
+.escalera .pista2 { grid-column: 1 / -1; height: 12px; border-radius: 999px; background: var(--linea); overflow: hidden; display: flex; }
+.escalera .pista2 i { height: 100%; background: var(--neutro); transition: width .6s cubic-bezier(.22,.9,.3,1); }
+.escalera .pista2 u { height: 100%; background: var(--acento); transition: width .6s cubic-bezier(.22,.9,.3,1); }
+.escalera .val2 { font-size: 13px; font-weight: 620; font-variant-numeric: tabular-nums; }
+.escalera .gan { font-size: 11.5px; color: var(--acento); font-variant-numeric: tabular-nums; }
+
+/* -------------------------------------------------- modo presentación ----------------------- */
+.rail-demo {
+  appearance: none; cursor: pointer; width: 100%; margin-top: 10px;
+  background: rgba(255,255,255,.07); border: 1px solid var(--rail-linea); border-radius: 9px;
+  color: var(--rail-tinta); font-size: 12.5px; padding: 9px 10px;
+  display: flex; align-items: center; gap: 8px; justify-content: center;
+}
+.rail-demo:hover { background: rgba(255,255,255,.14); }
+.rail-demo.activo { background: var(--acento); border-color: var(--acento); color: #fff; font-weight: 560; }
+
+.rotulo-demo {
+  position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+  z-index: 80; max-width: min(700px, calc(100vw - 40px));
+  background: var(--rail); color: var(--rail-tinta); border-radius: 12px;
+  box-shadow: 0 18px 48px -12px rgba(0,0,0,.55); padding: 14px 18px;
+  display: flex; align-items: center; gap: 14px;
+  animation: sube .28s cubic-bezier(.22,.9,.3,1);
+}
+@keyframes sube { from { opacity: 0; transform: translate(-50%, 14px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.rotulo-demo .paso {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--acento); color: #fff;
+  display: grid; place-items: center; font-size: 12.5px; font-weight: 680; flex: none;
+}
+.rotulo-demo .txt { font-size: 13.5px; line-height: 1.45; }
+.rotulo-demo .txt b { font-weight: 620; }
+.rotulo-demo .salir {
+  appearance: none; background: rgba(255,255,255,.12); border: 0; border-radius: 7px; cursor: pointer;
+  color: var(--rail-tinta); font-size: 12px; padding: 6px 11px; flex: none; margin-left: auto;
+}
+.rotulo-demo .salir:hover { background: rgba(255,255,255,.22); }
+.rotulo-demo .progreso { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.12); border-radius: 0 0 12px 12px; overflow: hidden; }
+.rotulo-demo .progreso i { display: block; height: 100%; background: var(--acento); width: 0; }
+
+/* Resalta el panel del que está hablando el modo presentación. */
+.enfocado {
+  box-shadow: 0 0 0 2px var(--acento), var(--sombra-alta) !important;
+  transition: box-shadow .3s ease;
+}
+
+/* -------------------------------------------------- móvil ----------------------------------- */
+@media (max-width: 980px) {
+  .app { grid-template-columns: 1fr; background: var(--papel); }
+  .rail {
+    position: sticky; top: 0; height: auto; flex-direction: row; align-items: center; gap: 10px;
+    padding: 10px 14px; overflow-x: auto; z-index: 50;
+  }
+  .rail-marca { padding: 0 6px 0 0; }
+  .rail-rotulo, .rail-tarjeta .m, .rail-pie { display: none; }
+  .rail-nav { flex-direction: row; gap: 4px; }
+  .rail-nav button { padding: 7px 11px; white-space: nowrap; }
+  .rail-tarjeta { margin: 0 0 0 auto; padding: 6px 10px; display: flex; align-items: center; gap: 8px; }
+  .rail-tarjeta .n { margin: 0; font-size: 12.5px; max-width: 30vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rail-tarjeta .cambiar { margin: 0; width: auto; padding: 4px 9px; }
+  .lienzo { padding: 0 14px 36px; }
+  .cabecera { padding: 14px 0 12px; }
+}
+@media (max-width: 620px) { .rail-txt span, .rail-tarjeta .n { display: none; } }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+</style>
+</head>
+<body>
+
+<!-- Degradados compartidos. Viven fuera de las secciones porque un `defs` dentro de una pestaña
+     oculta deja de estar disponible para la que sí se ve. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="go" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="var(--acento)" stop-opacity="0"/>
+    <stop offset="55%" stop-color="var(--acento)" stop-opacity=".32"/>
+    <stop offset="100%" stop-color="var(--acento)" stop-opacity="0"/>
+  </linearGradient>
+</defs></svg>
+
+<div class="app">
+
+<!-- ============================================================================== RAÍL -->
+<aside class="rail">
+  <div class="rail-marca">
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+      <defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#3a8fe0"/><stop offset="100%" stop-color="#0a68c4"/>
+      </linearGradient></defs>
+      <rect width="30" height="30" rx="8" fill="url(#gm)"/>
+      <path d="M5 20c3.2 0 3.2-3 6.4-3s3.2 3 6.4 3 3.2-3 6.4-3" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+      <path d="M5 24.5c3.2 0 3.2-2.4 6.4-2.4s3.2 2.4 6.4 2.4 3.2-2.4 6.4-2.4" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".5"/>
+      <path d="M15 6.2l4.4 8.3H10.6z" fill="#fff"/>
+    </svg>
+    <span class="rail-txt"><b>Estela</b><span>Control de flota</span></span>
+  </div>
+
+  <div class="rail-rotulo">Paneles</div>
+  <nav class="rail-nav" id="nav" role="tablist">
+    <button role="tab" aria-selected="true" data-panel="p-resumen">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 13V9M6.2 13V4.5M9.8 13V7M13.5 13V2.5"/></svg>
+      Resumen
+    </button>
+    <button role="tab" aria-selected="false" data-panel="p-flota">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 11.5c2 0 2-2 4-2s2 2 4 2 2-2 4-2"/><path d="M3.2 8.6V5L8 2.6 12.8 5v3.6"/><path d="M8 2.6v6.2"/></svg>
+      Mi flota
+    </button>
+    <button role="tab" aria-selected="false" data-panel="p-buque">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.4"/><path d="M10.4 10.4L14 14" stroke-linecap="round"/></svg>
+      Un buque
+    </button>
+    <button role="tab" aria-selected="false" data-panel="p-porque">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M6.2 6.1a1.9 1.9 0 1 1 2.5 1.8c-.5.2-.7.6-.7 1.1v.3"/><path d="M8 11.6v.01"/></svg>
+      Por qué emite
+    </button>
+    <button role="tab" aria-selected="false" data-panel="p-europa">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.8"/><path d="M2.2 8h11.6M8 2.2c1.8 2 1.8 9.6 0 11.6M8 2.2C6.2 4.2 6.2 11.8 8 13.8"/></svg>
+      Toda Europa
+    </button>
+  </nav>
+
+  <button class="rail-demo" id="btn-demo">
+    <svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3 1.8v10.4l9-5.2z"/></svg>
+    <span id="btn-demo-txt">Modo presentación</span>
+  </button>
+
+  <div class="rail-rotulo">Naviera activa</div>
+  <div class="rail-tarjeta">
+    <div class="n" id="rail-nombre">Cargando…</div>
+    <div class="m" id="rail-meta">&nbsp;</div>
+    <button class="cambiar" id="abrir-selector">Cambiar naviera</button>
+  </div>
+
+  <div class="rail-pie">
+    <div class="luz" id="rail-luz"><i></i> conectando…</div>
+    <div id="rail-datos">THETIS-MRV · EMSA</div>
+    <div style="margin-top:8px"><a href="/docs">Documentación de la API</a></div>
+  </div>
+</aside>
+
+<!-- ============================================================================== LIENZO -->
+<main class="lienzo">
+
+<!-- ------------------------------------------------------------------ RESUMEN -->
+<section id="p-resumen" role="tabpanel">
+  <header class="cabecera">
+    <div>
+      <h1>Estela, en una pantalla</h1>
+      <p>Un sistema que predice, explica y simula las emisiones de CO₂ de la flota que declara al registro europeo, construido solo con datos públicos.</p>
+    </div>
+    <div class="der" id="r-chips"></div>
+  </header>
+
+  <div class="tablero">
+
+    <!-- titular -->
+    <div class="panel foco sp12" id="r-foco">
+      <svg class="ondas" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 76 C220 56 340 96 600 76 S980 56 1200 76" fill="none" stroke="url(#go)" stroke-width="2"/>
+        <path d="M0 96 C240 74 360 116 600 96 S980 74 1200 96" fill="none" stroke="url(#go)" stroke-width="1.4"/>
+        <path d="M0 56 C200 36 380 78 600 56 S1000 36 1200 56" fill="none" stroke="url(#go)" stroke-width="1.1"/>
+      </svg>
+      <div class="panel-cuerpo">
+        <span class="rotulo">El resultado que ordena el trabajo</span>
+        <div class="cifrón">
+          <span class="n num" id="r-num">—</span>
+          <span class="u">% más de CO₂ evitado, sin recortar una hora más de navegación</span>
+        </div>
+        <p class="frase" id="r-frase">A igualdad de horas de navegación evitadas, concentrar el esfuerzo en los cuatro tipos de buque que más emiten por hora ahorra prácticamente el doble que repartirlo por igual entre toda la flota. <b>No es cuánto se recorta: es dónde.</b></p>
+      </div>
+      <div class="panel-pie" id="r-pie">&nbsp;</div>
+    </div>
+
+    <!-- los tres objetivos -->
+    <div class="sp12">
+      <div class="objetivos">
+        <button class="objetivo" data-ir="p-flota">
+          <span class="ord">1</span>
+          <h3>Predecir</h3>
+          <span class="cifra num" id="r-o1">—</span>
+          <p>Cuánto CO₂ emite un buque al año a partir de datos que cualquiera puede descargar: tipo, horas de mar, velocidad media y capacidad de carga reconstruida. Medido sobre buques que el modelo <b>nunca vio</b>.</p>
+          <span class="ir">Abrir el centro de control de una flota →</span>
+        </button>
+        <button class="objetivo" data-ir="p-porque">
+          <span class="ord">2</span>
+          <h3>Explicar</h3>
+          <span class="cifra num" id="r-o2">—</span>
+          <p>Lo que se lleva el tipo de buque en cuanto entran la velocidad y el tamaño. Pasa del 41,6 % al 6,6 %: <b>no explicaba las emisiones, hacía de sustituto</b> de algo que nadie había medido.</p>
+          <span class="ir">Ver qué mueve las emisiones →</span>
+        </button>
+        <button class="objetivo" data-ir="p-europa">
+          <span class="ord">3</span>
+          <h3>Simular</h3>
+          <span class="cifra num" id="r-o3">—</span>
+          <p>Lo que ahorraría la flota europea navegando un 10 % menos de millas. Es casi lo que emitió en 2025 la flota completa de graneleros del continente.</p>
+          <span class="ir">Probar un escenario sobre toda Europa →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- serie -->
+    <div class="panel sp8" id="r-panel-serie">
+      <div class="panel-cab">
+        <h2>Ocho ejercicios de la flota europea</h2>
+        <p>Lo que se declaró cada año y lo que el modelo predice sobre esas mismas filas. Pase el ratón por la curva.</p>
+      </div>
+      <div class="panel-cuerpo"><svg class="grafico" id="r-serie" viewBox="0 0 720 250" preserveAspectRatio="xMidYMid meet"></svg></div>
+      <div class="panel-pie" id="r-serie-pie">&nbsp;</div>
+    </div>
+
+    <!-- calidad -->
+    <div class="panel sp4">
+      <div class="panel-cab">
+        <h2>Cuánto vale cada dato</h2>
+        <p>R² del mismo algoritmo según qué información se le da. La ganancia de cada peldaño, en azul.</p>
+      </div>
+      <div class="panel-cuerpo"><div class="escalera" id="r-escalera"></div></div>
+      <div class="panel-pie">Las dos variables reconstruidas valen entre las dos <b>+0,115 de R²</b>. Pasar de Random Forest a XGBoost valía +0,008: <b>la comparación de algoritmos entera vale menos que cualquiera de las dos</b>.</div>
+    </div>
+
+    <!-- de qué está hecho -->
+    <div class="panel sp12">
+      <div class="panel-cab"><h2>De qué está hecho</h2></div>
+      <div class="panel-cuerpo">
+        <div class="pilaKPI tira5" style="border:1px solid var(--linea);border-radius:var(--radio-s);overflow:hidden">
+          <div class="tesela"><span class="r">Registro público</span><span class="v num" id="r-k1">—</span><span class="a">buques-año declarados, 2018-2025</span></div>
+          <div class="tesela"><span class="r">Buques distintos</span><span class="v num">25.802</span><span class="a">de toda la flota del EEE</span></div>
+          <div class="tesela"><span class="r">Precisión fuera de muestra</span><span class="v num">R² 0,948</span><span class="a">sobre buques nunca vistos</span></div>
+          <div class="tesela"><span class="r">Pruebas automáticas</span><span class="v num">116</span><span class="a">vigilan cifras, no códigos 200</span></div>
+          <div class="tesela"><span class="r">Errores silenciosos hallados</span><span class="v num">7</span><span class="a">y corregidos, con su medida</span></div>
+        </div>
+      </div>
+      <div class="panel-pie">Todo sale de <b>THETIS-MRV</b>, el registro que publica la Agencia Europea de Seguridad Marítima. No se ha comprado ni un solo dato: el tamaño del buque, que el registro no publica y que la literatura resuelve comprándolo, se <b>reconstruye dividiendo dos intensidades que sí publica</b>.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ------------------------------------------------------------------ MI FLOTA -->
+<section id="p-flota" role="tabpanel" hidden>
+  <header class="cabecera">
+    <div>
+      <h1 id="f-titulo">Mi flota</h1>
+      <p>Qué emite su flota hoy, qué le cuesta y dónde está el margen. Datos del ejercicio 2025, el último que publica EMSA.</p>
+    </div>
+    <div class="der" id="f-chips"></div>
+  </header>
+
+  <div class="tablero">
+
+    <!-- mandos -->
+    <div class="panel sp12">
+      <div class="panel-cab">
+        <h2>Plan operativo</h2>
+        <p>Elija un plan de referencia o ajuste los dos mandos. Las horas de mar no se tocan a mano: se deducen de <em>millas = horas × velocidad</em>, para que no pueda pedirse un plan físicamente imposible.</p>
+      </div>
+      <div class="panel-cuerpo">
+        <div class="mandos">
+          <div class="presets" id="f-presets"></div>
+          <div style="display:grid;gap:12px">
+            <div class="campo">
+              <div class="lin"><label for="f-millas">Millas navegadas</label><span class="val" id="f-millas-val">−10 %</span></div>
+              <input type="range" id="f-millas" min="-30" max="10" step="1" value="-10">
+              <div class="escala"><span>−30 %</span><span>hoy</span><span>+10 %</span></div>
+            </div>
+            <div class="campo">
+              <div class="lin"><label for="f-velocidad">Velocidad media</label><span class="val" id="f-velocidad-val">sin cambios</span></div>
+              <input type="range" id="f-velocidad" min="-25" max="15" step="1" value="0">
+              <div class="escala"><span>−25 %</span><span>hoy</span><span>+15 %</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- resultado -->
+    <div class="panel foco sp5" id="f-foco">
+      <svg class="ondas" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 80 C110 62 170 98 300 80 S490 62 600 80" fill="none" stroke="url(#go)" stroke-width="2"/>
+        <path d="M0 98 C120 78 180 116 300 98 S490 78 600 98" fill="none" stroke="url(#go)" stroke-width="1.4"/>
+        <path d="M0 62 C100 44 190 82 300 62 S500 44 600 62" fill="none" stroke="url(#go)" stroke-width="1.1"/>
+      </svg>
+      <div class="panel-cuerpo">
+        <span class="rotulo" id="f-rotulo">Resultado del plan</span>
+        <div class="cifrón">
+          <span class="n num" id="f-num">—</span>
+          <span class="u" id="f-uni">t de CO₂ al año</span>
+          <span class="delta" id="f-delta" hidden></span>
+        </div>
+        <p class="frase" id="f-frase">&nbsp;</p>
+        <div id="f-antes"></div>
+      </div>
+      <div class="panel-pie" id="f-pie">&nbsp;</div>
+    </div>
+
+    <!-- dinero -->
+    <div class="panel sp4">
+      <div class="panel-cab">
+        <h2>De dónde sale el dinero</h2>
+        <p>Tres bolsillos, y solo uno depende del precio del CO₂.</p>
+      </div>
+      <div class="panel-cuerpo cuerpo-centro"><div class="donut" id="f-donut"></div></div>
+      <div class="panel-pie" id="f-dinero-pie">&nbsp;</div>
+    </div>
+
+    <!-- kpis -->
+    <div class="panel sp3">
+      <div class="pilaKPI">
+        <div class="tesela"><span class="r">Días de mar liberados</span><span class="v num" id="f-dias">—</span><span class="a" id="f-dias-pie">&nbsp;</span></div>
+        <div class="tesela"><span class="r">Emisión declarada 2025</span><span class="v num" id="f-base">—</span><span class="a" id="f-base-pie">&nbsp;</span></div>
+        <div class="tesela"><span class="r">Factura de cumplimiento 2026</span><span class="v num" id="f-factura">—</span><span class="a" id="f-factura-pie">&nbsp;</span></div>
+        <div class="tesela"><span class="r">Margen sin recortar una milla</span><span class="v num" id="f-gratis">—</span><span class="a" id="f-gratis-pie">&nbsp;</span></div>
+      </div>
+    </div>
+
+    <!-- prioridad -->
+    <div class="panel sp7">
+      <div class="panel-cab">
+        <h2>Por dónde empezar <span class="conteo" id="f-accion-conteo"></span></h2>
+        <p>Sus buques ordenados por lo que este plan ahorra en cada uno. Toque uno para abrir su ficha.</p>
+      </div>
+      <div class="panel-cuerpo"><div class="lista" id="f-accion"></div></div>
+    </div>
+
+    <!-- riesgo -->
+    <div class="panel sp5">
+      <div class="panel-cab">
+        <h2>Riesgo regulatorio <button class="termino" data-term="cii">CII</button></h2>
+        <p>Calificaciones de hoy y buques que caen a D o E si siguen operando igual.</p>
+      </div>
+      <div class="panel-cuerpo">
+        <div class="pilaCII" id="f-pila"></div>
+        <div class="leyenda" id="f-leyenda"></div>
+        <div id="f-riesgo-lista" style="margin-top:12px"></div>
+      </div>
+      <div class="panel-pie" id="f-riesgo-pie">&nbsp;</div>
+    </div>
+
+    <!-- reparto por tipo -->
+    <div class="panel sp5">
+      <div class="panel-cab">
+        <h2>Reparto por tipo de buque</h2>
+        <p>Dónde se concentra el ahorro dentro de su propia flota.</p>
+      </div>
+      <div class="panel-cuerpo cuerpo-flex"><div class="barras reparte" id="f-tipos"></div></div>
+      <div class="panel-pie">Una flota mixta no ahorra a partes iguales: el mismo recorte porcentual rinde mucho más en los tipos que más CO₂ emiten por hora de navegación.</div>
+    </div>
+
+    <!-- cartera -->
+    <div class="panel sp7">
+      <div class="panel-cab">
+        <h2>Cartera completa <span class="conteo" id="f-cartera-conteo"></span></h2>
+        <p>Toque una columna para ordenar por ella; toque un buque para abrir su ficha.</p>
+      </div>
+      <div class="panel-cuerpo">
+        <input type="text" id="q-cartera" placeholder="Filtrar por nombre, IMO o tipo…" autocomplete="off" style="margin-bottom:10px;max-width:340px">
+        <div class="desliza alta"><table id="tabla-cartera">
+          <thead><tr>
+            <th data-orden="nombre">Buque</th>
+            <th data-orden="tipo" style="text-align:left">Tipo</th>
+            <th data-orden="banda">CII</th>
+            <th data-orden="co2">CO₂ 2025 (t)</th>
+            <th data-orden="factura">Factura 2026</th>
+            <th data-orden="ahorro">Margen</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+      <div class="panel-pie" id="f-cartera-pie">&nbsp;</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ------------------------------------------------------------------ UN BUQUE -->
+<section id="p-buque" role="tabpanel" hidden>
+  <header class="cabecera">
+    <div>
+      <h1>Un buque</h1>
+      <p>Ficha completa de cualquiera de los 25.802 buques que declararon al registro europeo entre 2018 y 2025.</p>
+    </div>
+    <div class="der">
+      <div class="buscador" style="min-width:260px">
+        <span class="lupa"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.4"/><path d="M10.4 10.4L14 14" stroke-linecap="round"/></svg></span>
+        <input type="text" id="q-buque" placeholder="Cruise Barcelona, 9351426…" autocomplete="off">
+      </div>
+      <select id="b-anio" style="width:auto"></select>
+    </div>
+  </header>
+
+  <div class="tablero">
+    <div class="panel sp12" id="caja-resultados" hidden>
+      <div class="panel-cab"><h2>Resultados de la búsqueda</h2></div>
+      <div class="panel-cuerpo"><div class="lista" id="b-resultados"></div></div>
+    </div>
+
+    <div class="panel foco sp7" id="b-foco" hidden>
+      <div class="panel-cuerpo">
+        <span class="rotulo" id="b-rotulo">Ficha del buque</span>
+        <p class="frase" id="b-frase" style="margin:0 0 12px">&nbsp;</p>
+        <div class="cifrón">
+          <span class="n num" id="b-num">—</span>
+          <span class="u">t de CO₂ al año</span>
+          <span class="delta" id="b-delta" hidden></span>
+        </div>
+        <div id="b-antes"></div>
+      </div>
+      <div class="panel-pie" id="b-pie">&nbsp;</div>
+    </div>
+
+    <div class="panel sp5" id="b-kpis" hidden>
+      <div class="pilaKPI">
+        <div class="tesela"><span class="r">Calificación <button class="termino" data-term="cii">CII</button> 2025</span><span class="v" id="b-cii">—</span><span class="a" id="b-cii-pie">&nbsp;</span></div>
+        <div class="tesela"><span class="r">Factura <button class="termino" data-term="ets">ETS</button> 2026</span><span class="v num" id="b-ets">—</span><span class="a" id="b-ets-pie">&nbsp;</span></div>
+        <div class="tesela"><span class="r"><button class="termino" data-term="fueleu">FuelEU</button> 2025</span><span class="v num" id="b-fueleu">—</span><span class="a" id="b-fueleu-pie">&nbsp;</span></div>
+      </div>
+    </div>
+
+    <div class="panel sp7" id="caja-curva" hidden>
+      <div class="panel-cab">
+        <h2>Qué pasa si navega menos</h2>
+        <p>CO₂ que deja de emitir al año con cada recorte de millas. Pase el ratón por la curva.</p>
+      </div>
+      <div class="panel-cuerpo"><svg class="grafico" id="b-curva" viewBox="0 0 560 220" preserveAspectRatio="xMidYMid meet"></svg></div>
+      <div class="panel-pie"><div class="desliza"><table id="b-tabla">
+        <thead><tr><th>Plan</th><th>Horas de mar</th><th>CO₂ (t)</th><th>Ahorro (t)</th><th>Ahorro</th><th>€ evitados</th></tr></thead>
+        <tbody></tbody>
+      </table></div></div>
+    </div>
+
+    <div class="panel sp5" id="caja-trayecto" hidden>
+      <div class="panel-cab">
+        <h2>Trayectoria de calificación</h2>
+        <p>La exigencia del <button class="termino" data-term="cii">CII</button> se endurece cada año según un calendario ya publicado.</p>
+      </div>
+      <div class="panel-cuerpo">
+        <div class="trayecto" id="b-trayecto"></div>
+        <div class="leyenda" id="b-leyenda"></div>
+        <div class="aviso" id="b-palanca">&nbsp;</div>
+        <dl class="ficha" id="b-ficha"></dl>
+      </div>
+    </div>
+
+    <div class="panel sp12" id="caja-fiab" hidden>
+      <div class="panel-pie" id="b-fiabilidad" style="border-top:0">&nbsp;</div>
+    </div>
+  </div>
+</section>
+
+<!-- ------------------------------------------------------------------ POR QUÉ -->
+<section id="p-porque" role="tabpanel" hidden>
+  <header class="cabecera">
+    <div>
+      <h1>Por qué emite lo que emite</h1>
+      <p>El segundo objetivo del trabajo. Un modelo que acierta y no se deja explicar no sirve para decidir: aquí se ve qué mira el modelo, cuánto vale cada dato y cuál es el número accionable.</p>
+    </div>
+    <div class="der" id="q-chips"></div>
+  </header>
+
+  <div class="tablero">
+
+    <!-- SHAP por nivel -->
+    <div class="panel sp7" id="q-panel-shap">
+      <div class="panel-cab">
+        <h2>Qué explica las emisiones</h2>
+        <p>Reparto de la explicación del modelo. <b>Vaya cambiando de nivel</b> y mire qué le pasa al tipo de buque.</p>
+      </div>
+      <div class="panel-cuerpo">
+        <div class="niveles-sel" id="q-niveles"></div>
+        <div class="barras" id="q-shap"></div>
+      </div>
+      <div class="panel-pie" id="q-shap-pie">&nbsp;</div>
+    </div>
+
+    <!-- el hallazgo -->
+    <div class="panel foco sp5" id="q-panel-caida">
+      <svg class="ondas" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 80 C110 62 170 98 300 80 S490 62 600 80" fill="none" stroke="url(#go)" stroke-width="2"/>
+        <path d="M0 98 C120 78 180 116 300 98 S490 78 600 98" fill="none" stroke="url(#go)" stroke-width="1.4"/>
+      </svg>
+      <div class="panel-cuerpo">
+        <span class="rotulo">El resultado de la interpretabilidad</span>
+        <div class="cifrón">
+          <span class="n num" id="q-caida">—</span>
+          <span class="u">se lleva el tipo de buque cuando el modelo ve el tamaño y la velocidad</span>
+        </div>
+        <p class="frase">Con la información mínima explicaba el <b id="q-caida-antes">41,6 %</b>. No es que el tipo de buque dejara de importar: <b>nunca fue la causa</b>. Estaba haciendo de sustituto del tamaño y de la operación, que no se habían medido.</p>
+        <div id="q-caida-barras" style="margin-top:16px"></div>
+      </div>
+      <div class="panel-pie">La lección más transferible del trabajo: <b>una variable categórica dominante debe mirarse siempre con sospecha</b>. Una etiqueta administrativa no es un mecanismo físico; si explica mucho, lo normal es que esté tapando algo que no se ha medido.</div>
+    </div>
+
+    <!-- coste por hora -->
+    <div class="panel sp7" id="q-panel-hora">
+      <div class="panel-cab">
+        <h2>El número accionable: lo que cuesta una hora de navegación</h2>
+        <p>Toneladas de CO₂ por hora navegada, por tipo de buque. Es lo que convierte el modelo en una decisión: dice <b>dónde</b> rinde más cada hora que se deja de navegar.</p>
+      </div>
+      <div class="panel-cuerpo cuerpo-flex"><div class="barras reparte" id="q-hora"></div></div>
+      <div class="panel-pie" id="q-hora-pie">&nbsp;</div>
+    </div>
+
+    <!-- niveles -->
+    <div class="panel sp5 libre" id="q-panel-niveles">
+      <div class="panel-cab">
+        <h2>Lo que vale cada pieza de información</h2>
+        <p>El mismo algoritmo, la misma partición y el mismo protocolo. Lo único que cambia es qué se le deja ver.</p>
+      </div>
+      <div class="panel-cuerpo"><div class="escalera" id="q-escalera"></div></div>
+      <div class="panel-pie" id="q-niveles-pie">&nbsp;</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ------------------------------------------------------------------ TODA EUROPA -->
+<section id="p-europa" role="tabpanel" hidden>
+  <header class="cabecera">
+    <div>
+      <h1>Toda la flota europea</h1>
+      <p>Aquí el sujeto ya no es una naviera sino el regulador: qué pasa si toda la flota que declara al registro europeo cambia de operación.</p>
+    </div>
+    <div class="der" id="e-chips"></div>
+  </header>
+
+  <div class="tablero">
+
+    <div class="panel sp12">
+      <div class="panel-cab"><h2>Escenario</h2></div>
+      <div class="panel-cuerpo">
+        <div class="mandos">
+          <div class="presets" id="e-presets"></div>
+          <div style="display:grid;gap:12px">
+            <div class="campo">
+              <div class="lin"><label for="e-millas">Millas navegadas</label><span class="val" id="e-millas-val">−10 %</span></div>
+              <input type="range" id="e-millas" min="-30" max="10" step="1" value="-10">
+              <div class="escala"><span>−30 %</span><span>hoy</span><span>+10 %</span></div>
+            </div>
+            <div class="campo">
+              <div class="lin"><label for="e-velocidad">Velocidad media</label><span class="val" id="e-velocidad-val">sin cambios</span></div>
+              <input type="range" id="e-velocidad" min="-25" max="15" step="1" value="0">
+              <div class="escala"><span>−25 %</span><span>hoy</span><span>+15 %</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="ajustes" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--linea)">
+          <div class="campo"><label for="e-anio">Ejercicio</label><select id="e-anio"></select></div>
+          <div class="campo"><label for="e-precio">Derecho de emisión (€/t)</label><input type="text" id="e-precio" inputmode="decimal"></div>
+          <div class="campo"><label for="e-regimen">Régimen ETS</label>
+            <select id="e-regimen">
+              <option value="2024">2024 · entrega el 40 %</option>
+              <option value="2025">2025 · entrega el 70 %</option>
+              <option value="2026" selected>2026 · entrega el 100 %</option>
+            </select>
+          </div>
+          <div class="campo"><label for="e-familia">Modelo</label>
+            <select id="e-familia"><option value="xgb">XGBoost</option><option value="red">Red neuronal</option><option value="mezcla">Media de ambos</option></select>
+          </div>
+          <button class="boton" id="e-reset">Restablecer</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel foco sp5">
+      <svg class="ondas" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 80 C110 62 170 98 300 80 S490 62 600 80" fill="none" stroke="url(#go)" stroke-width="2"/>
+        <path d="M0 98 C120 78 180 116 300 98 S490 78 600 98" fill="none" stroke="url(#go)" stroke-width="1.4"/>
+      </svg>
+      <div class="panel-cuerpo">
+        <span class="rotulo" id="e-rotulo">CO₂ evitado al año en toda la flota</span>
+        <div class="cifrón">
+          <span class="n num" id="e-num">—</span>
+          <span class="u">Mt de CO₂</span>
+          <span class="delta" id="e-delta" hidden></span>
+        </div>
+        <p class="frase" id="e-frase">&nbsp;</p>
+      </div>
+      <div class="panel-pie" id="e-pie">&nbsp;</div>
+    </div>
+
+    <div class="panel sp4">
+      <div class="panel-cab"><h2>Cumplimiento evitado</h2><p>Derechos que no hay que comprar y multa que no hay que pagar.</p></div>
+      <div class="panel-cuerpo cuerpo-centro"><div class="donut" id="e-donut"></div></div>
+      <div class="panel-pie" id="e-donut-pie">&nbsp;</div>
+    </div>
+
+    <div class="panel sp3">
+      <div class="pilaKPI">
+        <div class="tesela"><span class="r">Horas de mar evitadas</span><span class="v num" id="e-horas">—</span><span class="a">millones de horas al año</span></div>
+        <div class="tesela"><span class="r">Emisión de la flota</span><span class="v num" id="e-base">—</span><span class="a" id="e-base-pie">&nbsp;</span></div>
+        <div class="tesela"><span class="r"><button class="termino" data-term="elasticidad">Elasticidad</button> implícita</span><span class="v num" id="e-elas">—</span><span class="a">% de CO₂ por % de millas</span></div>
+      </div>
+    </div>
+
+    <div class="panel sp7" id="e-panel-duelo">
+      <div class="panel-cab">
+        <h2>El resultado de cabecera: no es cuánto se recorta, es dónde</h2>
+        <p id="e-pie-focal">Las mismas horas de navegación evitadas, repartidas entre todos los buques o concentradas en los cuatro tipos que más emiten por hora.</p>
+      </div>
+      <div class="panel-cuerpo">
+        <div class="ajustes" style="margin-bottom:14px">
+          <div class="campo" style="max-width:260px"><label for="e-esfuerzo">Esfuerzo a repartir</label>
+            <select id="e-esfuerzo">
+              <option value="0.02">2 % de las horas de la flota</option>
+              <option value="0.05" selected>5 % de las horas de la flota</option>
+              <option value="0.08">8 % de las horas de la flota</option>
+            </select>
+          </div>
+        </div>
+        <div class="duelo" id="e-duelo"></div>
+      </div>
+      <div class="panel-pie" id="e-lectura">&nbsp;</div>
+    </div>
+
+    <div class="panel sp5">
+      <div class="panel-cab"><h2>Dónde se concentra el ahorro</h2><p>Reparto del CO₂ evitado por tipo de buque.</p></div>
+      <div class="panel-cuerpo cuerpo-flex"><div class="barras reparte" id="e-tipos"></div></div>
+    </div>
+
+    <div class="panel sp5 libre">
+      <div class="panel-cab">
+        <h2>Lo que vale un día de mar evitado</h2>
+        <p>Por debajo de esta cifra, recortar millas ya sale a cuenta sin que nadie pague por el CO₂.</p>
+      </div>
+      <div class="panel-cuerpo"><div class="desliza alta" style="max-height:340px"><table id="e-dias">
+        <thead><tr><th>Tipo de buque</th><th>€ por día de mar</th><th>CO₂ evitado (t)</th></tr></thead><tbody></tbody>
+      </table></div></div>
+    </div>
+
+    <div class="panel sp7">
+      <div class="panel-cab">
+        <h2>Quién paga la factura <span class="conteo" id="e-nav-conteo"></span></h2>
+        <p>Toque una naviera para abrir su centro de control.</p>
+      </div>
+      <div class="panel-cuerpo">
+        <div class="pilaKPI tira3" style="border:1px solid var(--linea);border-radius:var(--radio-s);overflow:hidden;margin-bottom:14px">
+          <div class="tesela"><span class="r">Factura total de la flota</span><span class="v num" id="e-nav-total">—</span><span class="a"><button class="termino" data-term="ets">ETS</button> + <button class="termino" data-term="fueleu">FuelEU</button></span></div>
+          <div class="tesela"><span class="r">Navieras que pagan la mitad</span><span class="v num" id="e-nav-mitad">—</span><span class="a" id="e-nav-mitad-pie">&nbsp;</span></div>
+          <div class="tesela"><span class="r">Déficit compensable por dentro</span><span class="v num" id="e-nav-pool">—</span><span class="a" id="e-nav-pool-pie">&nbsp;</span></div>
+        </div>
+        <div class="lista" id="e-navieras"></div>
+      </div>
+    </div>
+
+    <!-- pabellón -->
+    <div class="panel sp12" id="e-panel-pabellon">
+      <div class="panel-cab">
+        <h2>Desde qué país se paga la factura europea <span class="conteo" id="e-pab-conteo"></span></h2>
+        <p>La única dimensión geográfica que el registro público permite: el país del puerto de registro del buque, reconstruido de una columna que el proyecto no había usado nunca y que cubre el 96,4 % de las emisiones de 2025.</p>
+      </div>
+      <div class="panel-cuerpo">
+        <div class="bloque-barra" id="e-bloques"></div>
+        <div class="leyenda" id="e-bloques-ley" style="margin-bottom:16px"></div>
+        <div class="barras" id="e-pabellon"></div>
+      </div>
+      <div class="panel-pie" id="e-pab-pie">&nbsp;</div>
+    </div>
+
+    <div class="panel sp12">
+      <div class="panel-cab"><h2>Cómo está hecho esto, en cinco frases</h2></div>
+      <div class="panel-cuerpo" style="font-size:12.5px;color:var(--tinta-2);line-height:1.6">
+        <b style="color:var(--tinta)">1.</b> El modelo predice el CO₂ anual de un buque a partir de datos públicos: tipo, horas de mar, velocidad media y capacidad de carga reconstruida. R² 0,948 sobre buques que nunca vio.<br>
+        <b style="color:var(--tinta)">2.</b> El ahorro de un plan se mide <b style="color:var(--tinta)">predicho contra predicho</b>, nunca contra el dato declarado: así el error del modelo en cada buque se cancela al restar.<br>
+        <b style="color:var(--tinta)">3.</b> Las horas de mar no se fijan a mano: se deducen de <em>millas = horas × velocidad</em>, de modo que no puede construirse un plan físicamente imposible.<br>
+        <b style="color:var(--tinta)">4.</b> El panel no calcula nada. Cada cifra de esta pantalla es una respuesta literal del servicio, que a su vez importa el mismo módulo que ejecuta el cuaderno del trabajo.<br>
+        <b style="color:var(--tinta)">5.</b> La palanca de velocidad está <b style="color:var(--tinta)">infravalorada a propósito</b>: la velocidad publicada es una media anual que mezcla navegación con tiempo parado, así que su efecto es una cota inferior.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="pie-legal">
+  <b>Estela</b> — Trabajo Fin de Máster en Big Data, Data Science e Inteligencia Artificial (UCM).
+  Fuente de los datos: <a href="https://mrv.emsa.europa.eu/#public/emission-report" target="_blank" rel="noopener">THETIS-MRV (EMSA)</a>,
+  Reglamento (UE) 2015/757. Reutilización citando la fuente. El precio del derecho de emisión y el del combustible son cotizaciones de mercado, no resultados del trabajo.
+</footer>
+
+</main>
+</div>
+
+<!-- selector de naviera -->
+<div class="velo" id="velo" hidden>
+  <div class="dialogo">
+    <h3>Elegir naviera</h3>
+    <p>Escriba el nombre o el número IMO de compañía. Sin escribir nada salen las mayores del registro.</p>
+    <div class="buscador">
+      <span class="lupa"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.4"/><path d="M10.4 10.4L14 14" stroke-linecap="round"/></svg></span>
+      <input type="text" id="q-naviera" placeholder="MSC, Maersk, Grimaldi, Baleària…" autocomplete="off" spellcheck="false">
+    </div>
+    <div id="sug-naviera" style="margin-top:10px"></div>
+  </div>
+</div>
+
+<div id="globo" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+
+/* ==================================================================================================
+   El panel es deliberadamente tonto: no calcula, pregunta.
+
+   Cada cifra de la pantalla es una respuesta literal de un endpoint público, y el servicio a su vez
+   importa el mismo `src/simulador.py` que ejecuta el cuaderno del trabajo. Por eso no existe la
+   posibilidad de que el panel y la memoria enseñen números distintos: entre la figura y la tabla no
+   hay una segunda implementación de ninguna fórmula.
+
+   Lo único que este fichero decide por su cuenta es **qué se enseña primero y con qué tamaño**, que
+   es justamente lo que convierte un servicio en una herramienta.
+   ================================================================================================== */
+
+const $ = (s) => document.querySelector(s);
+const num = (v, d = 0) =>
+  v == null || Number.isNaN(v) ? "—" : Number(v).toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d });
+/* El menos tipográfico (U+2212) tiene la anchura del "+" y la de los dígitos: con el guion del
+   teclado las columnas de porcentajes dejan de alinearse. */
+const menos = (t) => String(t).replace(/-/g, "−");
+const pct = (v, d = 1) => (v == null ? "—" : menos((v > 0 ? "+" : "") + num(v, d)) + " %");
+
+/** Toneladas con la unidad que toca: nadie lee "13.750.000 t" ni "0,00002 Mt". Devuelve también el
+    formateador, para que el contador animado no cambie de escala a mitad de camino. */
+function magnitudT(v) {
+  const enMt = Math.abs(v ?? 0) >= 1e6;
+  const fmt = enMt ? (x) => num(x / 1e6, 2) : (x) => num(x, 0);
+  return { n: fmt(v ?? 0), u: enMt ? "Mt de CO₂ al año" : "t de CO₂ al año", fmt };
+}
+function eur(v) {
+  if (v == null || Number.isNaN(v)) return "—";
+  const a = Math.abs(v);
+  if (a >= 1e9) return num(v / 1e9, 2) + " mil M€";
+  if (a >= 1e6) return num(v / 1e6, a >= 1e7 ? 0 : 1) + " M€";
+  if (a >= 1e3) return num(v / 1e3, 0) + " k€";
+  return num(v, 0) + " €";
+}
+
+const ULTIMO = new WeakMap();
+function animar(nodo, valor, fmt) {
+  if (valor == null || Number.isNaN(valor)) { nodo.textContent = "—"; ULTIMO.set(nodo, 0); return; }
+  const desde = ULTIMO.get(nodo) ?? 0;
+  ULTIMO.set(nodo, valor);
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || desde === valor) { nodo.textContent = fmt(valor); return; }
+  const t0 = performance.now(), dur = 520;
+  (function paso(t) {
+    const k = Math.min(1, ((t || t0) - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    nodo.textContent = fmt(desde + (valor - desde) * e);
+    if (k < 1) requestAnimationFrame(paso);
+  })(t0);
+}
+
+async function pedir(ruta, cuerpo) {
+  const op = cuerpo ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cuerpo) } : {};
+  const r = await fetch(ruta, op);
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(d.detail || r.statusText), { estado: r.status, datos: d });
+  return d;
+}
+const rebote = {};
+const rebotar = (clave, fn, ms = 240) => { clearTimeout(rebote[clave]); rebote[clave] = setTimeout(fn, ms); };
+
+/* ---------------------------------------------------------------- globo y glosario --------- */
+const globo = $("#globo");
+let globoFijo = false;
+function situarGlobo(e) {
+  const a = globo.offsetWidth, h = globo.offsetHeight;
+  let x = e.clientX + 14, y = e.clientY - h - 12;
+  if (x + a > innerWidth - 10) x = Math.max(10, e.clientX - a - 14);
+  if (y < 10) y = e.clientY + 20;
+  globo.style.left = x + "px"; globo.style.top = y + "px";
+}
+function conGlobo(nodo, html) {
+  nodo.addEventListener("mousemove", (e) => {
+    if (globoFijo) return;
+    globo.innerHTML = typeof html === "function" ? html() : html;
+    globo.style.opacity = "1"; situarGlobo(e);
+  });
+  nodo.addEventListener("mouseleave", () => { if (!globoFijo) globo.style.opacity = "0"; });
+}
+
+const GLOSARIO = {
+  cii: `<b>CII · Carbon Intensity Indicator</b><span class="g">La OMI califica cada buque de A a E según el
+    CO₂ que emite por tonelada transportada y milla recorrida. Por debajo de C hay que presentar un plan de
+    corrección, y el listón sube cada año hasta 2030: un buque puede caer de banda sin cambiar nada.</span>`,
+  ets: `<b>EU ETS · derechos de emisión</b><span class="g">Desde 2024 el transporte marítimo compra un derecho
+    por cada tonelada de CO₂ dentro de ámbito: el 100 % de los viajes entre puertos europeos y de las emisiones
+    en puerto, el 50 % de los viajes con un extremo fuera. En 2024 se entregaba el 40 % de lo emitido; desde
+    2026, el 100 %, y entran metano y óxido nitroso.</span>`,
+  fueleu: `<b>FuelEU Maritime</b><span class="g">Grava la <i>intensidad</i> de carbono de la energía consumida,
+    no las emisiones. Navegar menos baja la multa en proporción, pero no mejora la calificación del buque: eso
+    solo se consigue cambiando de combustible.</span>`,
+  elasticidad: `<b>Elasticidad implícita</b><span class="g">Cuánto baja el CO₂ por cada punto porcentual de
+    millas recortado. No llega a 1,00 porque hay emisiones que no dependen de las millas —tiempo en puerto,
+    auxiliares, carga hotelera—, y el modelo lo aprendió del dato en vez de que se lo impusieran.</span>`,
+  banda: `<b>Banda por elección de modelo</b><span class="g">No es un intervalo de confianza: mide hasta qué
+    punto la respuesta habría cambiado si se hubiera elegido la otra familia de modelos. Que sea estrecha es el
+    resultado, no el adorno.</span>`,
+};
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-term]");
+  if (!b) { globoFijo = false; globo.style.opacity = "0"; return; }
+  e.preventDefault(); globoFijo = false;
+  globo.innerHTML = GLOSARIO[b.dataset.term] || ""; globo.style.opacity = "1";
+  const r = b.getBoundingClientRect();
+  situarGlobo({ clientX: r.left + r.width / 2, clientY: r.top });
+  globoFijo = true;
+});
+document.addEventListener("mouseover", (e) => {
+  const b = e.target.closest("[data-term]");
+  if (!b || globoFijo) return;
+  globo.innerHTML = GLOSARIO[b.dataset.term] || ""; globo.style.opacity = "1";
+  const r = b.getBoundingClientRect();
+  situarGlobo({ clientX: r.left + r.width / 2, clientY: r.top });
+});
+document.addEventListener("mouseout", (e) => { if (e.target.closest("[data-term]") && !globoFijo) globo.style.opacity = "0"; });
+
+/* ---------------------------------------------------------------- navegación --------------- */
+function irA(panel) {
+  document.querySelectorAll("#nav button").forEach((b) => {
+    const activa = b.dataset.panel === panel;
+    b.setAttribute("aria-selected", String(activa));
+    $("#" + b.dataset.panel).hidden = !activa;
+  });
+  scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll("#nav button").forEach((b) => b.addEventListener("click", () => irA(b.dataset.panel)));
+
+/* ---------------------------------------------------------------- planes ------------------- */
+const PLANES = [
+  { id: "hoy",   t: "Sin cambios",           s: "como hoy",                 d: 0,     v: 0 },
+  { id: "slow",  t: "Slow steaming",         s: "−10 % de velocidad",       d: 0,     v: -0.10 },
+  { id: "m5",    t: "Recorte suave",         s: "−5 % de millas",           d: -0.05, v: 0 },
+  { id: "m10",   t: "Recorte de referencia", s: "−10 % de millas",          d: -0.10, v: 0 },
+  { id: "combo", t: "Plan combinado",        s: "−10 % millas, −5 % vel.",  d: -0.10, v: -0.05 },
+];
+function pintarPlanes(caja, alElegir) {
+  caja.innerHTML = PLANES.map((p) =>
+    `<button class="preset" data-plan="${p.id}" aria-pressed="false">${p.t}<span class="pp">${p.s}</span></button>`).join("");
+  caja.querySelectorAll(".preset").forEach((b) =>
+    b.addEventListener("click", () => alElegir(PLANES.find((x) => x.id === b.dataset.plan))));
+}
+function marcarPlan(caja, d, v) {
+  const act = PLANES.find((p) => Math.abs(p.d - d) < 1e-9 && Math.abs(p.v - v) < 1e-9);
+  caja.querySelectorAll(".preset").forEach((b) => b.setAttribute("aria-pressed", String(!!act && b.dataset.plan === act.id)));
+}
+function describirPlan(p) {
+  const t = [];
+  if (p.delta_distancia) t.push(`recorren un <b>${num(Math.abs(p.delta_distancia * 100), 0)} %${p.delta_distancia < 0 ? " menos" : " más"}</b> de millas`);
+  if (p.delta_velocidad) t.push(`navegan un <b>${num(Math.abs(p.delta_velocidad * 100), 0)} %${p.delta_velocidad < 0 ? " más despacio" : " más rápido"}</b>`);
+  return t.join(" y ");
+}
+
+/* ---------------------------------------------------------------- CII ---------------------- */
+/* Los nombres de nivel vienen de la cabecera de un CSV que los cuadernos escriben sin acentos. Se
+   corrigen al pintarlos y no en el fichero: ese CSV es un artefacto reproducible y no se edita a
+   mano. `corto` quita además el número de orden y el paréntesis, que en una etiqueta estrecha
+   sobran. */
+const bonito = (t) => String(t).replace(/tamano/g, "tamaño");
+const corto = (t) => bonito(t).replace(/^\d+\.\s*/, "").replace(/\s*\(.*\)\s*$/, "");
+
+const BANDAS = ["A", "B", "C", "D", "E"];
+const sello = (b, g = false) =>
+  b ? `<span class="sello ${g ? "grande " : ""}cii cii-${b.toLowerCase()}">${b}</span>` : `<span class="sello">–</span>`;
+const leyendaCII = (n) => { n.innerHTML = BANDAS.map((x) => `<span class="cii cii-${x.toLowerCase()}">${x}${x === "C" ? " · mínimo" : ""}</span>`).join(""); };
+
+/* ---------------------------------------------------------------- anillo ------------------- */
+/* Un anillo y no una tarta: el hueco central lleva el total, así que la comparación de sectores no
+   tiene que competir con la lectura de la magnitud. Cada sector va además etiquetado en la leyenda
+   con su cifra, de modo que el color nunca es el único portador del dato. */
+function donut(caja, partes, centro, sub) {
+  const total = partes.reduce((s, p) => s + Math.max(0, p.v), 0);
+  const R = 54, G = 17, C = 2 * Math.PI * R;
+  let off = 0;
+  const arcos = partes.map((p) => {
+    const frac = total > 0 ? Math.max(0, p.v) / total : 0;
+    const a = `<circle cx="64" cy="64" r="${R}" fill="none" stroke="${p.c}" stroke-width="${G}"
+      stroke-dasharray="${(frac * C).toFixed(2)} ${(C - frac * C).toFixed(2)}"
+      stroke-dashoffset="${(-off * C).toFixed(2)}" transform="rotate(-90 64 64)"
+      style="transition:stroke-dasharray .55s cubic-bezier(.22,.9,.3,1),stroke-dashoffset .55s cubic-bezier(.22,.9,.3,1)"/>`;
+    off += frac;
+    return a;
+  }).join("");
+  caja.innerHTML =
+    `<svg width="128" height="128" viewBox="0 0 128 128" aria-hidden="true">
+       <circle cx="64" cy="64" r="${R}" fill="none" stroke="var(--linea)" stroke-width="${G}"/>
+       ${arcos}
+       <text class="centro" x="64" y="61" text-anchor="middle" fill="var(--tinta)" font-size="19" font-weight="640" letter-spacing="-0.5">${centro}</text>
+       <text x="64" y="78" text-anchor="middle" fill="var(--tinta-3)" font-size="10.5">${sub}</text>
+     </svg>
+     <div class="donut-ley">` +
+    partes.map((p) =>
+      `<div><i style="background:${p.c}"></i><span class="e">${p.n}</span>
+         <span class="c">${p.txt}</span>
+         <span class="p">${total > 0 ? num(100 * Math.max(0, p.v) / total, 0) + " %" : "—"}</span></div>`).join("") +
+    `</div>`;
+  caja.querySelectorAll(".donut-ley div").forEach((d, i) =>
+    conGlobo(d, `<b>${partes[i].n}</b><span class="g">${partes[i].txt}</span><span class="g">${partes[i].g || ""}</span>`));
+}
+
+/* ---------------------------------------------------------------- curva -------------------- */
+/* Área bajo la curva en vez de barras sueltas: lo que se quiere ver en un recorte progresivo es la
+   FORMA de la respuesta —si es proporcional o se agota—, y eso una línea lo dice y cuatro columnas
+   no. Los puntos siguen estando, y la tabla de debajo conserva todas las cifras. */
+function curva(svg, puntos, formatoY, globoDe) {
+  const W = 560, H = 220, mI = 54, mD = 16, mS = 26, mB = 34;
+  const ax = W - mI - mD, ay = H - mS - mB;
+  const max = Math.max(...puntos.map((p) => p.y), 1) * 1.12;
+  const X = (i) => mI + (puntos.length === 1 ? ax / 2 : (i * ax) / (puntos.length - 1));
+  const Y = (v) => mS + ay - (v / max) * ay;
+
+  let g = "";
+  for (let k = 0; k <= 3; k++) {
+    const v = (max / 3) * k, y = Y(v);
+    g += `<line class="malla" x1="${mI}" y1="${y.toFixed(1)}" x2="${W - mD}" y2="${y.toFixed(1)}"/>
+          <text class="eje" x="${mI - 8}" y="${(y + 3.5).toFixed(1)}" text-anchor="end">${formatoY(v)}</text>`;
+  }
+  const d = puntos.map((p, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(p.y).toFixed(1)}`).join(" ");
+  const area = `${d} L${X(puntos.length - 1).toFixed(1)},${(mS + ay).toFixed(1)} L${X(0).toFixed(1)},${(mS + ay).toFixed(1)} Z`;
+
+  svg.innerHTML =
+    `<defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
+       <stop offset="0%" stop-color="var(--acento)" stop-opacity=".30"/>
+       <stop offset="100%" stop-color="var(--acento)" stop-opacity="0"/>
+     </linearGradient></defs>
+     ${g}
+     <path d="${area}" fill="url(#ga)"/>
+     <path class="linea" d="${d}"/>` +
+    puntos.map((p, i) => {
+      const ult = i === puntos.length - 1;
+      return `<circle class="punto ${ult ? "act" : ""}" cx="${X(i).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${ult ? 5 : 4}"/>
+              <text class="eje" x="${X(i).toFixed(1)}" y="${H - 12}" text-anchor="middle">${p.x}</text>` +
+        (ult ? `<text class="etiq" x="${X(i).toFixed(1)}" y="${(Y(p.y) - 13).toFixed(1)}" text-anchor="end">${p.etiq}</text>` : "");
+    }).join("") +
+    puntos.map((p, i) =>
+      `<rect class="zona" data-i="${i}" x="${(X(i) - ax / (2 * (puntos.length - 1 || 1))).toFixed(1)}" y="${mS}"
+             width="${(ax / (puntos.length - 1 || 1)).toFixed(1)}" height="${ay}" fill="transparent"/>`).join("");
+
+  svg.querySelectorAll(".zona").forEach((z) => conGlobo(z, () => globoDe(puntos[Number(z.dataset.i)])));
+}
+
+/* ==================================================================================================
+   ARRANQUE
+   ================================================================================================== */
+let META = null, ETS = null, SALUD = null;
+
+async function arrancar() {
+  let salud, meta, ets;
+  try { [salud, meta, ets] = await Promise.all([pedir("/salud"), pedir("/metadatos"), pedir("/ets/parametros")]); }
+  catch { $("#rail-luz").innerHTML = `<i style="background:var(--rojo);box-shadow:none"></i> servicio no disponible`; return; }
+  SALUD = salud; META = meta; ETS = ets;
+
+  $("#rail-luz").innerHTML = `<i></i> servicio en directo`;
+  $("#rail-datos").innerHTML =
+    `${num(salud.filas_cargadas)} buques-año<br>THETIS-MRV ${salud.anios[0]}–${salud.anios.at(-1)}<br>
+     R² 0,948 en test<br>derecho ${num(ets.precio_eua_eur_t, 2)} €/t · ${ets.precio_fecha}`;
+
+  const chips = [
+    `<span class="chip">${num(salud.filas_cargadas)} buques-año</span>`,
+    `<span class="chip">R² 0,948 en buques nunca vistos</span>`,
+    `<span class="chip" title="${ets.precio_fuente}">derecho ${num(ets.precio_eua_eur_t, 2)} €/t</span>`,
+  ].join("");
+  $("#e-chips").innerHTML = chips;
+
+  const anios = salud.anios.slice().reverse();
+  for (const sel of [$("#b-anio"), $("#e-anio")]) sel.innerHTML = anios.map((a) => `<option value="${a}">${a}</option>`).join("");
+  $("#e-precio").value = num(ets.precio_eua_eur_t, 2);
+  if (meta?.modelo?.familia_de_referencia) $("#e-familia").value = meta.modelo.familia_de_referencia;
+  if (!salud.red_neuronal_cargada) {
+    $("#e-familia").value = "xgb";
+    $("#e-familia").querySelectorAll("option").forEach((o) => { if (o.value !== "xgb") o.disabled = true; });
+  }
+
+  pintarPlanes($("#f-presets"), (p) => { $("#f-millas").value = p.d * 100; $("#f-velocidad").value = p.v * 100; leerPlanFlota(); simularNaviera(); });
+  pintarPlanes($("#e-presets"), (p) => { $("#e-millas").value = p.d * 100; $("#e-velocidad").value = p.v * 100; leerPlanEuropa(); simularEuropa(false); });
+
+  leerPlanFlota(); leerPlanEuropa();
+  simularEuropa(false);
+  cargarDinero();
+  cargarPabellon();
+  cargarResumen();
+  cargarPorque();
+  arrancarNavieras();
+}
+
+/* ==================================================================================================
+   MI FLOTA
+   ================================================================================================== */
+let NAVIERA = null, FLOTA = null, SUGERENCIAS = [];
+
+const velo = $("#velo");
+const abrirSelector = (forzado) => {
+  velo.hidden = false;
+  velo.dataset.forzado = forzado ? "1" : "";
+  $("#q-naviera").value = "";
+  pintarSugerencias(SUGERENCIAS);
+  setTimeout(() => $("#q-naviera").focus(), 30);
+};
+const cerrarSelector = () => { if (!velo.dataset.forzado) velo.hidden = true; };
+$("#abrir-selector").addEventListener("click", () => abrirSelector(false));
+velo.addEventListener("click", (e) => { if (e.target === velo) cerrarSelector(); });
+addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarSelector(); });
+
+async function arrancarNavieras() {
+  let d;
+  try { d = await pedir("/navieras/buscar?limite=10"); }
+  catch (e) {
+    $("#rail-nombre").textContent = "Capa económica no calculada";
+    $("#rail-meta").textContent = "";
+    $("#abrir-selector").hidden = true;
+    $("#f-frase").innerHTML = e.estado === 503
+      ? `Este panel necesita la capa económica. Ejecute <code>python scripts/analisis_economia.py</code> y reinicie el servicio.
+         Mientras tanto, <b>Toda Europa</b> funciona con normalidad.`
+      : `No se ha podido cargar el listado de navieras.`;
+    $("#f-foco").hidden = false;
+    return;
+  }
+  SUGERENCIAS = d.navieras;
+  if (d.navieras.length) elegirNaviera(d.navieras[0]);
+}
+
+function pintarSugerencias(lista) {
+  const caja = $("#sug-naviera");
+  if (!lista.length) { caja.innerHTML = `<p class="vacio">Ninguna naviera coincide.</p>`; return; }
+  caja.innerHTML = `<div style="border:1px solid var(--linea);border-radius:var(--radio-s);overflow:hidden;max-height:44vh;overflow-y:auto">` +
+    lista.map((n, i) =>
+      `<button class="sugerencia" data-i="${i}">
+         <span class="a">${n.nombre}</span>
+         <span class="b">${num(n.buques)} buques · ${num(n.co2_t / 1e6, 2)} Mt de CO₂ · factura ${eur(n.factura_eur)}</span>
+       </button>`).join("") + `</div>`;
+  caja.querySelectorAll(".sugerencia").forEach((b) =>
+    b.addEventListener("click", () => { velo.dataset.forzado = ""; velo.hidden = true; elegirNaviera(lista[Number(b.dataset.i)]); }));
+}
+
+$("#q-naviera").addEventListener("input", () => {
+  const q = $("#q-naviera").value.trim();
+  rebotar("nav", async () => {
+    try { pintarSugerencias((await pedir(`/navieras/buscar?limite=12${q.length >= 2 ? "&q=" + encodeURIComponent(q) : ""}`)).navieras); }
+    catch { /* el diálogo se queda como está */ }
+  }, 230);
+});
+
+async function elegirNaviera(n) {
+  NAVIERA = n;
+  $("#rail-nombre").textContent = n.nombre;
+  $("#rail-meta").textContent = `${num(n.buques)} buques · ${num(n.co2_t / 1e6, 2)} Mt`;
+  $("#f-titulo").textContent = n.nombre;
+
+  let d;
+  try { d = await pedir(`/navieras/${encodeURIComponent(n.cid)}/flota?orden=ahorro&limite=500`); }
+  catch (e) { $("#f-frase").textContent = e.message; return; }
+  FLOTA = d;
+  const r = d.resumen;
+
+  $("#f-chips").innerHTML = [
+    `<span class="chip">${num(r.buques)} buques</span>`,
+    `<span class="chip">${num(r.co2_declarado_t / 1e6, 2)} Mt de CO₂ en 2025</span>`,
+    r.buques_en_riesgo_cii
+      ? `<span class="pastilla mal">${num(r.buques_en_riesgo_cii)} en riesgo CII</span>`
+      : `<span class="pastilla bien">sin buques en riesgo CII</span>`,
+    r.buques_que_incumplen_fueleu ? `<span class="pastilla ojo">${num(r.buques_que_incumplen_fueleu)} incumplen FuelEU</span>` : "",
+  ].join("");
+
+  animar($("#f-base"), r.co2_declarado_t / 1e6, (x) => num(x, 2) + " Mt");
+  $("#f-base-pie").textContent = `${num(r.horas_mar / 1e3, 0)} mil horas de mar`;
+  animar($("#f-factura"), r.factura_total_eur, eur);
+  $("#f-factura-pie").innerHTML = `${eur(r.factura_ets_2026_eur)} de ETS + ${eur(r.penalizacion_fueleu_eur)} de FuelEU`;
+  animar($("#f-gratis"), r.ahorro_alcanzable_eur, eur);
+  $("#f-gratis-pie").innerHTML = `${num(r.ahorro_alcanzable_t, 0)} t operando como la mediana de sus pares`;
+  conGlobo($("#f-gratis").parentElement, `<b>Margen a actividad constante</b>
+    <span class="g">${num(r.ahorro_alcanzable_t, 0)} t · ${eur(r.ahorro_alcanzable_eur)} al año</span>
+    <span class="g">Es una <b>cota superior</b> de lo alcanzable, no dinero garantizado: parte de la distancia
+    hasta la mediana es heterogeneidad no medida —rutas, meteorología, espera en puerto, carga real— y no
+    ineficiencia corregible.</span>`);
+
+  pintarRiesgo(d);
+  pintarCartera();
+  simularNaviera();
+}
+
+function pintarRiesgo(d) {
+  const cuenta = Object.fromEntries(BANDAS.map((b) => [b, 0]));
+  let sinBanda = 0;
+  for (const b of d.buques) (b.banda_cii_2025 ? cuenta[b.banda_cii_2025]++ : sinBanda++);
+  const total = BANDAS.reduce((s, b) => s + cuenta[b], 0);
+
+  const pila = $("#f-pila");
+  if (!total) pila.innerHTML = `<i style="flex:1;background:var(--neutro)">sin buques calificables</i>`;
+  else {
+    const usadas = BANDAS.filter((b) => cuenta[b]);
+    pila.innerHTML = usadas.map((b) =>
+      `<i class="cii cii-${b.toLowerCase()}" style="flex:${cuenta[b]}">${cuenta[b] / total > 0.08 ? b + " · " + cuenta[b] : ""}</i>`).join("");
+    usadas.forEach((b, i) => conGlobo(pila.children[i],
+      `<b>Calificación ${b}</b><span class="g">${cuenta[b]} buques · ${num(100 * cuenta[b] / total, 1)} % de los calificables</span>`));
+  }
+  leyendaCII($("#f-leyenda"));
+
+  const riesgo = d.buques.filter((b) => b.riesgo === "incumple" || b.riesgo === "cae pronto")
+    .sort((a, b) => (b.co2_declarado_t || 0) - (a.co2_declarado_t || 0)).slice(0, 5);
+  $("#f-riesgo-lista").innerHTML = riesgo.length
+    ? `<div class="lista">` + riesgo.map((b) =>
+        `<button class="item" data-imo="${b.imo}">
+           <span>${sello(b.banda_cii_2025)}</span>
+           <span class="cuerpo"><span class="t1">${b.nombre}</span>
+             <span class="t2">${b.tipo} · ${b.riesgo === "incumple" ? "hoy por debajo del mínimo exigido" : "cae a D o E en " + b.anio_de_caida_a_de}</span></span>
+           <span class="der"><span class="p">${eur((b.factura_ets_2026_eur || 0) + (b.penalizacion_fueleu_eur || 0))}</span><span class="s">de factura</span></span>
+         </button>`).join("") + `</div>`
+    : `<p class="vacio">Ningún buque incumple hoy ni cae a D/E antes de 2028.</p>`;
+  $("#f-riesgo-lista").querySelectorAll(".item").forEach((b) => b.addEventListener("click", () => abrirBuque(b.dataset.imo, 2025)));
+
+  $("#f-riesgo-pie").innerHTML =
+    `<b>${num(d.resumen.buques_en_riesgo_cii)} de ${num(d.resumen.buques)} buques</b> están hoy por debajo del mínimo exigido
+     o caen a D/E antes de 2028. El listón sube todos los años hasta 2030: un buque puede perder la banda sin haber
+     cambiado nada de su operación.` +
+    (sinBanda ? ` ${num(sinBanda)} no son calificables — el CII de ro-ro, ro-pax, crucero y car carrier se calcula sobre arqueo bruto, que el registro no publica.` : "");
+}
+
+/* ---------------------------------------------------------------- cartera ------------------ */
+let ORDEN = { campo: "ahorro", asc: false };
+const VALOR = {
+  nombre: (b) => b.nombre, tipo: (b) => b.tipo,
+  banda: (b) => (b.banda_cii_2025 ? "ABCDE".indexOf(b.banda_cii_2025) : 9),
+  co2: (b) => b.co2_declarado_t || 0,
+  factura: (b) => (b.factura_ets_2026_eur || 0) + (b.penalizacion_fueleu_eur || 0),
+  ahorro: (b) => b.ahorro_alcanzable_eur || 0,
+};
+function pintarCartera() {
+  if (!FLOTA) return;
+  const f = $("#q-cartera").value.trim().toLowerCase();
+  let filas = FLOTA.buques.filter((b) => !f || b.nombre.toLowerCase().includes(f) || b.imo.includes(f) || b.tipo.toLowerCase().includes(f));
+  const v = VALOR[ORDEN.campo];
+  filas = filas.slice().sort((a, b) => {
+    const x = v(a), y = v(b);
+    const c = typeof x === "string" ? x.localeCompare(y, "es") : x - y;
+    return ORDEN.asc ? c : -c;
+  });
+  $("#f-cartera-conteo").textContent = `${num(filas.length)} de ${num(FLOTA.buques.length)}`;
+  document.querySelectorAll("#tabla-cartera th").forEach((th) => {
+    const act = th.dataset.orden === ORDEN.campo;
+    th.style.color = act ? "var(--tinta)" : "";
+    th.textContent = th.textContent.replace(/[ ↑↓]+$/, "") + (act ? (ORDEN.asc ? " ↑" : " ↓") : "");
+  });
+  $("#tabla-cartera tbody").innerHTML = filas.slice(0, 400).map((b) =>
+    `<tr data-imo="${b.imo}" style="cursor:pointer">
+       <td><b>${b.nombre}</b><br><span style="color:var(--tinta-3);font-size:11px">IMO ${b.imo}</span></td>
+       <td style="text-align:left;color:var(--tinta-2)">${b.tipo}</td>
+       <td>${b.banda_cii_2025 ? sello(b.banda_cii_2025) : "<span style='color:var(--tinta-3)'>–</span>"}</td>
+       <td>${num(b.co2_declarado_t, 0)}</td>
+       <td>${eur((b.factura_ets_2026_eur || 0) + (b.penalizacion_fueleu_eur || 0))}</td>
+       <td><b>${eur(b.ahorro_alcanzable_eur)}</b></td>
+     </tr>`).join("");
+  $("#tabla-cartera tbody").querySelectorAll("tr").forEach((tr) => tr.addEventListener("click", () => abrirBuque(tr.dataset.imo, 2025)));
+  $("#f-cartera-pie").innerHTML = filas.length > 400
+    ? `Se muestran los 400 primeros de ${num(filas.length)}. Afine el filtro para ver el resto.`
+    : `El <b>margen</b> es lo que cada buque dejaría de gastar operando como la mediana de sus pares, sin recortar una sola milla.`;
+}
+document.querySelectorAll("#tabla-cartera th").forEach((th) => th.addEventListener("click", () => {
+  const c = th.dataset.orden;
+  ORDEN = { campo: c, asc: ORDEN.campo === c ? !ORDEN.asc : ["nombre", "tipo", "banda"].includes(c) };
+  pintarCartera();
+}));
+$("#q-cartera").addEventListener("input", () => rebotar("cart", pintarCartera, 170));
+
+/* ---------------------------------------------------------------- escenario ---------------- */
+function leerPlanFlota() {
+  const d = Number($("#f-millas").value) / 100, v = Number($("#f-velocidad").value) / 100;
+  $("#f-millas-val").textContent = d === 0 ? "sin cambios" : pct(d * 100, 0);
+  $("#f-velocidad-val").textContent = v === 0 ? "sin cambios" : pct(v * 100, 0);
+  marcarPlan($("#f-presets"), d, v);
+  return { delta_distancia: d, delta_velocidad: v };
+}
+
+async function simularNaviera() {
+  if (!NAVIERA) return;
+  const plan = leerPlanFlota();
+  $("#f-foco").classList.add("cargando");
+
+  let d;
+  try { d = await pedir(`/navieras/${encodeURIComponent(NAVIERA.cid)}/simular`, { ...plan, limite_buques: 8 }); }
+  catch (e) { $("#f-frase").textContent = "No se ha podido calcular este plan: " + e.message; $("#f-foco").classList.remove("cargando"); return; }
+
+  const gana = d.ahorro_t >= 0, quieto = !plan.delta_distancia && !plan.delta_velocidad;
+  const mag = magnitudT(Math.abs(d.ahorro_t));
+
+  $("#f-rotulo").textContent = quieto ? "Esta flota, como está hoy" : (gana ? "CO₂ que deja de emitir esta flota" : "CO₂ adicional de esta flota");
+  if (quieto) {
+    ULTIMO.set($("#f-num"), 0);
+    $("#f-num").textContent = num(d.co2_base_t / 1e6, 2);
+    $("#f-uni").textContent = "Mt de CO₂ declaradas en 2025";
+  } else {
+    animar($("#f-num"), Math.abs(d.ahorro_t), (x) => mag.fmt(Math.abs(x)));
+    $("#f-uni").textContent = mag.u;
+  }
+  $("#f-delta").hidden = quieto;
+  $("#f-delta").className = "delta" + (gana ? "" : " negativo");
+  $("#f-delta").textContent = (gana ? "−" : "+") + num(Math.abs(d.ahorro_pct), 1) + " % de sus emisiones";
+
+  $("#f-frase").innerHTML = quieto
+    ? `<b>${d.nombre}</b> declaró esto con sus ${num(d.buques_simulados)} buques. Elija un plan arriba para ver cuánto puede bajar y cuánto vale.`
+    : `Si los <b>${num(d.buques_simulados)} buques</b> de esta flota ${describirPlan(plan)}, se ahorran
+       <b>${eur(d.ahorro_total_eur)}</b> al año entre combustible y cumplimiento.`;
+  $("#f-pie").innerHTML = quieto
+    ? `Las cifras del panel son el punto de partida: emisión declarada en 2025 y factura de cumplimiento de 2026.`
+    : `El ahorro se mide <b>predicho contra predicho</b> sobre la misma fila del registro, nunca contra el dato declarado:
+       así el error del modelo en cada buque se cancela al restar. Derecho ${num(d.coste_ets.precio_eua_eur_t, 2)} €/t,
+       combustible ${num(d.precio_combustible_eur_t, 0)} €/t.`;
+
+  animar($("#f-dias"), Math.abs(d.dias_de_mar_evitados), (x) => num(x, 0));
+  $("#f-dias-pie").textContent = quieto ? "elija un plan" : (d.dias_de_mar_evitados >= 0 ? "días que no hay que navegar" : "días de mar adicionales");
+
+  pintarComparativa(d, quieto);
+  pintarDinero(d, quieto);
+  pintarTiposFlota(d, quieto);
+  pintarAccion(d, quieto);
+  $("#f-foco").classList.remove("cargando");
+}
+
+/* Dos barras y no una: el ahorro se entiende como lo que se le quita a una magnitud que ya existía.
+   Enseñar solo la diferencia esconde de cuánto se está hablando. */
+function pintarComparativa(d, quieto) {
+  const caja = $("#f-antes");
+  if (quieto) { caja.innerHTML = ""; return; }
+  const base = d.co2_base_t, esc = d.co2_escenario_t, tope = Math.max(base, esc, 1);
+  caja.className = "comparativa";
+  caja.innerHTML =
+    `<div class="c-fila"><span class="c-nom">Hoy</span>
+       <span class="c-pista"><i style="width:0"></i></span>
+       <span class="c-val">${num(base, 0)} t</span></div>
+     <div class="c-fila act"><span class="c-nom">Con el plan</span>
+       <span class="c-pista"><i style="width:0"></i></span>
+       <span class="c-val">${num(esc, 0)} t</span></div>`;
+  const [a, b] = caja.querySelectorAll(".c-pista i");
+  requestAnimationFrame(() => { a.style.width = (base / tope) * 100 + "%"; b.style.width = (esc / tope) * 100 + "%"; });
+}
+
+function pintarDinero(d, quieto) {
+  if (quieto) {
+    $("#f-donut").innerHTML = `<p class="vacio">Elija un plan para ver de dónde sale el dinero.</p>`;
+    $("#f-dinero-pie").innerHTML = `El bolsillo grande casi siempre es el combustible que no se quema, no el precio del CO₂.`;
+    return;
+  }
+  const partes = [
+    { n: "Combustible", v: d.combustible_evitado_eur, c: "var(--verde)", txt: eur(d.combustible_evitado_eur),
+      g: `${num(d.combustible_evitado_t, 0)} t a ${num(d.precio_combustible_eur_t, 0)} €/t` },
+    { n: "Derechos (ETS)", v: d.coste_ets.ahorro_eur, c: "var(--acento)", txt: eur(d.coste_ets.ahorro_eur),
+      g: `${num(d.coste_ets.derechos_evitados_t, 0)} t de derechos a ${num(d.coste_ets.precio_eua_eur_t, 2)} €/t` },
+    { n: "Multa FuelEU", v: d.coste_fueleu.penalizacion_evitada_eur, c: "var(--neutro)", txt: eur(d.coste_fueleu.penalizacion_evitada_eur),
+      g: `penalización evitada del periodo ${d.coste_fueleu.periodo}` },
+  ];
+  donut($("#f-donut"), partes, eur(d.ahorro_total_eur), "al año");
+  $("#f-dinero-pie").innerHTML =
+    `Solo el <b>${num(d.coste_ets.pct_del_ahorro_dentro_del_ambito, 1)} %</b> del CO₂ evitado cae dentro del ámbito del
+     <button class="termino" data-term="ets">ETS</button>, y <button class="termino" data-term="fueleu">FuelEU</button>
+     rinde poco a propósito: grava la intensidad, no las emisiones.`;
+}
+
+function pintarTiposFlota(d, quieto) {
+  const caja = $("#f-tipos");
+  const filas = (d.por_tipo || []).filter((t) => Math.abs(t.ahorro_t) > 0.5).slice(0, 9);
+  if (quieto || !filas.length) { caja.innerHTML = `<p class="vacio">Elija un plan para ver el reparto por tipo.</p>`; return; }
+  const tope = Math.max(...filas.map((t) => Math.abs(t.ahorro_t)));
+  caja.innerHTML = "";
+  for (const t of filas) {
+    const el = document.createElement("div");
+    el.className = "barra";
+    el.innerHTML = `<div class="nom" title="${t.tipo}">${t.tipo}</div>
+      <div class="pista"><div class="relleno" style="width:0"></div><span class="v"><b>${num(Math.abs(t.ahorro_t), 0)}</b> t</span></div>`;
+    caja.appendChild(el);
+    requestAnimationFrame(() => { el.querySelector(".relleno").style.width = (Math.abs(t.ahorro_t) / tope) * 100 + "%"; });
+    conGlobo(el, `<b>${t.tipo}</b><span class="g">${num(t.n)} buques · emiten ${num(t.co2_base_t, 0)} t</span>
+      <span class="g">ahorro ${num(Math.abs(t.ahorro_t), 0)} t (${num(Math.abs(t.ahorro_pct), 2)} %)</span>`);
+  }
+}
+
+function pintarAccion(d, quieto) {
+  const caja = $("#f-accion");
+  $("#f-accion-conteo").textContent = quieto ? "" : `${num(d.buques.length)} de ${num(d.buques_simulados)}`;
+  if (quieto || !d.buques.length) { caja.innerHTML = `<p class="vacio">Elija un plan y aquí aparecerán sus buques ordenados por lo que ahorra cada uno.</p>`; return; }
+  const tope = Math.max(...d.buques.map((b) => Math.abs(b.ahorro_t)), 1);
+  caja.innerHTML = d.buques.map((b, i) =>
+    `<button class="item" data-imo="${b.imo}">
+       <span class="rank">${i + 1}</span>
+       <span class="cuerpo">
+         <span class="t1">${b.nombre} ${b.banda_cii_2025 ? sello(b.banda_cii_2025) : ""}</span>
+         <span class="t2">${b.tipo} · IMO ${b.imo} · ${num(b.ahorro_pct, 1)} % de sus emisiones</span>
+         <span class="mini"><i style="width:${(Math.abs(b.ahorro_t) / tope) * 100}%"></i></span>
+       </span>
+       <span class="der"><span class="p">${num(Math.abs(b.ahorro_t), 0)} t</span><span class="s">${eur(b.ahorro_eur)}</span></span>
+     </button>`).join("");
+  caja.querySelectorAll(".item").forEach((el, i) => {
+    el.addEventListener("click", () => abrirBuque(el.dataset.imo, 2025));
+    const x = d.buques[i];
+    conGlobo(el, `<b>${x.nombre}</b><span class="g">hoy ${num(x.co2_base_t, 0)} t · con el plan ${num(x.co2_escenario_t, 0)} t</span>
+      <span class="g">ahorro ${num(Math.abs(x.ahorro_t), 0)} t (${num(x.ahorro_pct, 2)} %) · ${eur(x.ahorro_eur)}</span>`);
+  });
+}
+
+["#f-millas", "#f-velocidad"].forEach((s) => {
+  $(s).addEventListener("input", () => { leerPlanFlota(); rebotar("f", simularNaviera, 200); });
+  $(s).addEventListener("change", () => rebotar("f", simularNaviera, 0));
+});
+
+/* ==================================================================================================
+   UN BUQUE
+   ================================================================================================== */
+const RECORTES = [-0.05, -0.10, -0.15, -0.20];
+
+async function buscarBuques() {
+  const q = $("#q-buque").value.trim(), caja = $("#b-resultados");
+  if (q.length < 2) { $("#caja-resultados").hidden = true; return; }
+  let d;
+  try { d = await pedir(`/buques/buscar?q=${encodeURIComponent(q)}&anio=${$("#b-anio").value}&limite=8`); }
+  catch { return; }
+  $("#caja-resultados").hidden = false;
+  if (!d.n) { caja.innerHTML = `<p class="vacio">Ningún buque coincide en ${$("#b-anio").value}. Pruebe con otro ejercicio.</p>`; return; }
+  caja.innerHTML = d.buques.map((b) =>
+    `<button class="item" data-imo="${b.imo}" data-anio="${b.anio}">
+       <span class="rank">·</span>
+       <span class="cuerpo"><span class="t1">${b.nombre}</span>
+         <span class="t2">${b.tipo} · IMO ${b.imo} · ${b.visto_en_entrenamiento ? "visto en entrenamiento" : "nunca visto por el modelo"}</span></span>
+       <span class="der"><span class="p">${num(b.co2_observado_t, 0)} t</span><span class="s">declaradas en ${b.anio}</span></span>
+     </button>`).join("");
+  caja.querySelectorAll(".item").forEach((b) => b.addEventListener("click", () => verBuque(b.dataset.imo, Number(b.dataset.anio))));
+}
+
+function abrirBuque(imo, anio) {
+  irA("p-buque");
+  $("#b-anio").value = String(anio);
+  verBuque(imo, anio);
+}
+
+async function verBuque(imo, anio) {
+  for (const id of ["#b-foco", "#b-kpis", "#caja-curva", "#caja-trayecto", "#caja-fiab"]) $(id).hidden = false;
+  $("#b-foco").classList.add("cargando");
+
+  let d;
+  try {
+    d = await pedir("/simular/buque", {
+      imo, anio,
+      escenarios: RECORTES.map((v) => ({ delta_distancia: v, etiqueta: `${menos(num(v * 100, 0))} % millas` })),
+      precio_eua: ETS ? ETS.precio_eua_eur_t : null, anio_regimen: 2026,
+    });
+  } catch (e) { $("#b-foco").classList.remove("cargando"); $("#b-frase").textContent = e.message; return; }
+
+  const b = d.buque, pred = d.co2_base_predicho_t, obs = b.co2_observado_t;
+  $("#b-rotulo").textContent = `${b.tipo} · IMO ${b.imo} · ejercicio ${b.anio}`;
+  $("#b-frase").innerHTML = `<b>${b.nombre}</b> emite, según el modelo:`;
+  animar($("#b-num"), pred, (x) => num(x, 0));
+
+  const err = obs ? ((pred - obs) / obs) * 100 : null;
+  $("#b-delta").hidden = obs == null;
+  $("#b-delta").className = "delta" + (Math.abs(err ?? 0) > 15 ? " negativo" : "");
+  $("#b-delta").textContent = obs ? `${pct(err, 1)} frente a las ${num(obs, 0)} t declaradas` : "";
+
+  const f = d.fiabilidad;
+  $("#b-pie").innerHTML = b.visto_en_entrenamiento
+    ? `Este buque estuvo en el entrenamiento del modelo.`
+    : `<b>Este buque no estuvo en el entrenamiento</b>, así que la predicción no puede atribuirse a memorización.`;
+  $("#b-fiabilidad").innerHTML =
+    `<b>Cómo leer esta ficha.</b> Cae en el quintil ${f.quintil_de_emision} de emisión, donde el error relativo mediano
+     del modelo sobre buques nunca vistos es del <b>${num(f.error_relativo_mediano_pct, 1)} %</b>. ${f.aviso}
+     La respuesta de un buque concreto es escalonada, no proporcional, porque el modelo parte el espacio en regiones:
+     en un buque suelto lea el <b>orden de magnitud y el signo</b>, no el decimal. En el agregado de una flota esos
+     escalones se promedian y la cifra sí es precisa.`;
+
+  pintarCurva(d.escenarios);
+  pintarComparativaBuque(pred, d.escenarios);
+  cargarPasaporte(imo);
+  $("#b-foco").classList.remove("cargando");
+}
+
+function pintarCurva(escenarios) {
+  const puntos = [{ x: "hoy", y: 0, etiq: "", e: null }].concat(escenarios.map((e) => ({
+    x: menos(num(e.delta_distancia * 100, 0)) + " %",
+    y: Math.abs(e.ahorro_t),
+    etiq: num(Math.abs(e.ahorro_t), 0) + " t",
+    e,
+  })));
+  curva($("#b-curva"), puntos, (v) => (v >= 1000 ? num(v / 1000, 0) + "k" : num(v, 0)), (p) =>
+    p.e
+      ? `<b>${p.x} de millas</b>
+         <span class="g">${num(p.e.horas_resultantes, 0)} horas de mar (${num(p.e.horas_resultantes / 24, 0)} días)</span>
+         <span class="g">${num(p.e.co2_escenario_t, 0)} t de CO₂ · ahorro ${num(Math.abs(p.e.ahorro_t), 0)} t</span>
+         <span class="g">${eur(p.e.coste_ets.ahorro_eur + p.e.coste_fueleu.penalizacion_evitada_eur)} evitados</span>`
+      : `<b>Sin cambios</b><span class="g">operación declarada en el registro</span>`);
+
+  $("#b-tabla tbody").innerHTML = escenarios.map((e) =>
+    `<tr><td>${menos(num(e.delta_distancia * 100, 0))} % de millas</td>
+         <td>${num(e.horas_resultantes, 0)}</td>
+         <td>${num(e.co2_escenario_t, 0)}</td>
+         <td>${num(Math.abs(e.ahorro_t), 0)}</td>
+         <td>${num(Math.abs(e.ahorro_pct), 1)} %</td>
+         <td>${eur(e.coste_ets.ahorro_eur + e.coste_fueleu.penalizacion_evitada_eur)}</td></tr>`).join("");
+}
+
+function pintarComparativaBuque(base, escenarios) {
+  const ref = escenarios.find((e) => Math.abs(e.delta_distancia + 0.10) < 1e-9) || escenarios[escenarios.length - 1];
+  const caja = $("#b-antes");
+  const tope = Math.max(base, ref.co2_escenario_t, 1);
+  caja.className = "comparativa";
+  caja.innerHTML =
+    `<div class="c-fila"><span class="c-nom">Hoy</span>
+       <span class="c-pista"><i style="width:0"></i></span><span class="c-val">${num(base, 0)} t</span></div>
+     <div class="c-fila act"><span class="c-nom">${menos(num(ref.delta_distancia * 100, 0))} % millas</span>
+       <span class="c-pista"><i style="width:0"></i></span><span class="c-val">${num(ref.co2_escenario_t, 0)} t</span></div>`;
+  const [a, b] = caja.querySelectorAll(".c-pista i");
+  requestAnimationFrame(() => { a.style.width = (base / tope) * 100 + "%"; b.style.width = (ref.co2_escenario_t / tope) * 100 + "%"; });
+}
+
+async function cargarPasaporte(imo) {
+  let d;
+  try { d = await pedir(`/buques/${encodeURIComponent(imo)}/pasaporte?delta_distancia=-0.10`); }
+  catch {
+    $("#caja-trayecto").hidden = true;
+    ["#b-cii", "#b-ets", "#b-fueleu"].forEach((s) => ($(s).textContent = "—"));
+    return;
+  }
+  $("#caja-trayecto").hidden = false;
+  const c = d.cii;
+
+  $("#b-cii").innerHTML = c.banda_2025 ? sello(c.banda_2025, true) : "—";
+  $("#b-cii-pie").innerHTML = c.banda_2025
+    ? `obtenido ${num(c.attained, 2)} frente a ${num(c.requerido_2025, 2)} exigido · ${c.anio_de_caida_a_de ? `<b>cae a D o E en ${c.anio_de_caida_a_de}</b>` : "no cae antes de 2031"}`
+    : (c.no_calificable_porque || "");
+  $("#b-ets").textContent = eur(d.ets.factura_2026_eur);
+  $("#b-ets-pie").textContent = `${num(d.ets.fraccion_dentro_de_ambito * 100, 0)} % de sus emisiones dentro de ámbito`;
+  $("#b-fueleu").textContent = d.fueleu.cumple === null ? "—" : (d.fueleu.cumple ? "cumple" : eur(d.fueleu.penalizacion_eur));
+  $("#b-fueleu-pie").textContent = d.fueleu.intensidad_wtw_g_mj
+    ? `intensidad ${num(d.fueleu.intensidad_wtw_g_mj, 2)} frente a ${num(d.fueleu.objetivo_2025_g_mj, 2)} g CO₂eq/MJ exigidos`
+    : "no evaluable con los datos públicos";
+
+  const t = c.trayectoria || {}, anios = Object.keys(t), caja = $("#b-trayecto");
+  if (!anios.length || !c.banda_2025) {
+    caja.innerHTML = `<p class="vacio">${c.no_calificable_porque || "Este buque no tiene calificación CII calculable."}</p>`;
+    $("#b-leyenda").innerHTML = "";
+  } else {
+    let previa = null;
+    caja.innerHTML = anios.map((a) => {
+      const v = t[a], cambia = previa && v && v !== previa;
+      previa = v || previa;
+      return `<div class="paso cii cii-${(v || "").toLowerCase()}${cambia ? " cambia" : ""}"><span class="a">${a}</span><span class="l">${v || "–"}</span></div>`;
+    }).join("");
+    leyendaCII($("#b-leyenda"));
+  }
+
+  const pal = d.palancas, esc = pal.escenario;
+  let txt = `<b>Lo que ya podría ahorrar sin navegar menos.</b> Operando como la mediana de sus pares
+    (${d.prediccion.grupo_de_comparacion}) evitaría <b>${num(pal.ahorro_a_actividad_constante_t, 0)} t</b> de CO₂ al año,
+    ${eur(pal.ahorro_a_actividad_constante_eur)} entre combustible y cumplimiento.`;
+  if (esc) {
+    txt += ` <b>Y con un 10 % menos de millas:</b> ${num(Math.abs(esc.ahorro_t), 0)} t menos,
+      ${eur(esc.ahorro_combustible_eur + esc.ahorro_ets_eur)} y ${num(Math.abs(esc.horas_evitadas) / 24, 0)} días de mar liberados`;
+    txt += esc.banda_cii_2026_con_escenario && esc.banda_cii_2026_con_escenario !== esc.banda_cii_2026_sin_escenario
+      ? `, con la calificación de 2026 pasando de ${sello(esc.banda_cii_2026_sin_escenario)} a ${sello(esc.banda_cii_2026_con_escenario)}.`
+      : (esc.banda_cii_2026_con_escenario ? `, sin que la calificación de 2026 llegue a cambiar de banda.` : ".");
+  }
+  $("#b-palanca").innerHTML = txt;
+
+  $("#b-ficha").innerHTML = [
+    ["Compañía", d.compania],
+    ["Capacidad de carga estimada", d.capacidad_estimada_t != null ? num(d.capacidad_estimada_t, 0) + " t" : "—"],
+    ["Dentro del ámbito del ETS", num(d.ets.fraccion_dentro_de_ambito * 100, 0) + " %"],
+    ["Grupo de comparación", d.prediccion.grupo_de_comparacion],
+    ["Desviación frente a sus pares", d.prediccion.residuo_relativo_pct != null ? pct(d.prediccion.residuo_relativo_pct, 1) : "—"],
+  ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+}
+
+$("#q-buque").addEventListener("input", () => rebotar("b", buscarBuques, 240));
+$("#b-anio").addEventListener("change", buscarBuques);
+
+/* ==================================================================================================
+   TODA EUROPA
+   ================================================================================================== */
+function leerPlanEuropa() {
+  const d = Number($("#e-millas").value) / 100, v = Number($("#e-velocidad").value) / 100;
+  $("#e-millas-val").textContent = d === 0 ? "sin cambios" : pct(d * 100, 0);
+  $("#e-velocidad-val").textContent = v === 0 ? "sin cambios" : pct(v * 100, 0);
+  marcarPlan($("#e-presets"), d, v);
+  const precio = Number(String($("#e-precio").value).replace(",", ".")) || (ETS ? ETS.precio_eua_eur_t : 80);
+  return {
+    anio: Number($("#e-anio").value), delta_distancia: d, delta_velocidad: v,
+    familia: $("#e-familia").value, precio_eua: precio, anio_regimen: Number($("#e-regimen").value),
+  };
+}
+
+/* Mientras se arrastra un mando se pide `banda:false`: el servicio evalúa una sola familia y responde
+   unas nueve veces más rápido, con la MISMA cifra central. La banda se pide al soltar. Nada se estima
+   ni se interpola en el cliente: simplemente se pregunta menos mientras se explora. */
+async function simularEuropa(rapido) {
+  const esc = leerPlanEuropa();
+  let d;
+  try { d = await pedir("/simular/flota", { ...esc, desglose_por_tipo: true, banda: !rapido }); }
+  catch (e) { $("#e-frase").textContent = "No se ha podido calcular: " + e.message; return; }
+
+  const gana = d.ahorro_Mt >= 0, quieto = !esc.delta_distancia && !esc.delta_velocidad;
+  $("#e-rotulo").textContent = quieto ? "La flota europea, como está hoy"
+    : (gana ? "CO₂ evitado al año en toda la flota" : "CO₂ adicional al año en toda la flota");
+  animar($("#e-num"), quieto ? d.co2_base_Mt : Math.abs(d.ahorro_Mt), (x) => num(x, 2));
+  $("#e-delta").hidden = !d.ahorro_pct;
+  $("#e-delta").className = "delta" + (gana ? "" : " negativo");
+  $("#e-delta").textContent = (gana ? "−" : "+") + num(Math.abs(d.ahorro_pct), 2) + " % de las emisiones";
+  $("#e-frase").innerHTML = quieto
+    ? `Emisión declarada por los ${num(d.flota.n_buques_anio)} buques de ${esc.anio}. Mueva los mandos para simular un escenario.`
+    : `Sobre <b>${num(d.flota.n_buques_anio)} buques</b> del ejercicio ${esc.anio}, con ${describirPlan(esc)}.`;
+  $("#e-pie").innerHTML = d.banda_Mt
+    ? `<button class="termino" data-term="banda">Banda por elección de modelo</button>:
+       <b>${num(Math.abs(d.banda_Mt.minimo), 2)} – ${num(Math.abs(d.banda_Mt.maximo), 2)} Mt</b>. No es un intervalo de
+       confianza: mide cuánto dependería la respuesta de haber elegido la otra familia.`
+    : `Una sola familia de modelo cargada, así que no hay banda entre modelos que mostrar.`;
+
+  animar($("#e-base"), d.co2_base_Mt, (x) => num(x, 1) + " Mt");
+  $("#e-base-pie").textContent = `${num(d.flota.n_buques_anio)} buques de ${esc.anio}`;
+  animar($("#e-horas"), Math.abs(d.horas_evitadas) / 1e6, (x) => num(x, 2));
+  $("#e-elas").textContent = d.elasticidad_implicita != null ? num(d.elasticidad_implicita, 3) : "—";
+
+  if (d.coste_ets) {
+    donut($("#e-donut"), [
+      { n: "Derechos (ETS)", v: d.coste_ets.ahorro_millones_eur, c: "var(--acento)",
+        txt: num(d.coste_ets.ahorro_millones_eur, 0) + " M€",
+        g: `${num(Math.abs(d.coste_ets.derechos_evitados_t) / 1e6, 2)} Mt de derechos a ${num(d.coste_ets.precio_eua_eur_t, 2)} €/t` },
+      { n: "Multa FuelEU", v: d.coste_fueleu.penalizacion_evitada_millones_eur, c: "var(--neutro)",
+        txt: num(d.coste_fueleu.penalizacion_evitada_millones_eur, 0) + " M€",
+        g: `penalización que deja de pagarse` },
+    ], num(d.cumplimiento_evitado_millones_eur, 0) + " M€", "al año");
+    $("#e-donut-pie").innerHTML =
+      `Del CO₂ evitado, solo el <b>${num(d.coste_ets.pct_del_ahorro_dentro_del_ambito, 1)} %</b> cae dentro del ámbito del
+       <button class="termino" data-term="ets">ETS</button>. <button class="termino" data-term="fueleu">FuelEU</button>
+       rinde mucho menos porque grava la intensidad del combustible, no las emisiones.`;
+  } else {
+    $("#e-donut").innerHTML = `<p class="vacio">Mueva los mandos para ver el cumplimiento evitado.</p>`;
+    $("#e-donut-pie").innerHTML = "&nbsp;";
+  }
+
+  pintarTipos(d.por_tipo || []);
+  if (!rapido) focalizado(esc);
+}
+
+function pintarTipos(filas) {
+  const utiles = filas.filter((f) => Math.abs(f.ahorro_Mt) > 0.0001)
+    .sort((a, b) => Math.abs(b.ahorro_Mt) - Math.abs(a.ahorro_Mt)).slice(0, 9);
+  const caja = $("#e-tipos");
+  if (!utiles.length) { caja.innerHTML = `<p class="vacio">Este escenario no modifica ninguna operación.</p>`; return; }
+  const tope = Math.max(...utiles.map((f) => Math.abs(f.ahorro_Mt)));
+  caja.innerHTML = "";
+  for (const f of utiles) {
+    const el = document.createElement("div");
+    el.className = "barra";
+    el.innerHTML = `<div class="nom" title="${f.tipo}">${f.tipo}</div>
+      <div class="pista"><div class="relleno" style="width:0"></div><span class="v"><b>${num(Math.abs(f.ahorro_Mt), 2)}</b> Mt</span></div>`;
+    caja.appendChild(el);
+    requestAnimationFrame(() => { el.querySelector(".relleno").style.width = (Math.abs(f.ahorro_Mt) / tope) * 100 + "%"; });
+    conGlobo(el, `<b>${f.tipo}</b><span class="g">${num(f.n)} buques · emiten ${num(f.co2_base_Mt, 2)} Mt</span>
+      <span class="g">ahorro ${num(Math.abs(f.ahorro_Mt), 3)} Mt (${num(Math.abs(f.ahorro_pct), 2)} %)</span>`);
+  }
+}
+
+async function focalizado(esc) {
+  const caja = $("#e-duelo"), lectura = $("#e-lectura");
+  let d;
+  try {
+    d = await pedir("/simular/focalizado", {
+      anio: esc.anio, pct_horas: Number($("#e-esfuerzo").value), familia: esc.familia,
+      precio_eua: esc.precio_eua, anio_regimen: esc.anio_regimen,
+    });
+  } catch (e) {
+    caja.innerHTML = `<p class="vacio">${e.estado === 422 ? "Ese esfuerzo no cabe dentro de los cuatro tipos objetivo. Pruebe con uno menor." : e.message}</p>`;
+    lectura.innerHTML = "&nbsp;"; return;
+  }
+
+  const u = d.politica_uniforme.ahorro_Mt, f = d.politica_focalizada.ahorro_Mt, tope = Math.max(u, f, 1e-9);
+  caja.innerHTML = "";
+  for (const x of [
+    { t: "Repartir entre todos", v: u, gana: false, eur: d.politica_uniforme.coste_ets.ahorro_millones_eur,
+      d: `Los ${num(d.esfuerzo.horas_totales_flota / 1e6, 1)} millones de horas de la flota bajan un ${num(Math.abs(d.politica_uniforme.recorte_pct), 1)} % en todos los buques por igual.` },
+    { t: "Concentrar donde más pesa", v: f, gana: true, eur: d.politica_focalizada.coste_ets.ahorro_millones_eur,
+      d: `Solo ${d.tipos_objetivo.join(", ")} recortan, y lo hacen un ${num(Math.abs(d.politica_focalizada.recorte_pct_en_los_tipos_objetivo), 1)} %.` },
+  ]) {
+    const el = document.createElement("div");
+    el.className = "duelo-fila" + (x.gana ? " gana" : "");
+    el.innerHTML = `<div class="duelo-cab"><span class="t">${x.t}</span>
+        <span class="c">${num(x.v, 2)} <small>Mt de CO₂ · ${num(x.eur, 0)} M€</small></span></div>
+      <div class="duelo-pista"><i style="width:0"></i></div><div class="d">${x.d}</div>`;
+    caja.appendChild(el);
+    requestAnimationFrame(() => { el.querySelector("i").style.width = (x.v / tope) * 100 + "%"; });
+  }
+
+  $("#e-pie-focal").innerHTML =
+    `Las mismas <b>${num(d.esfuerzo.horas_a_evitar / 1e6, 2)} millones de horas</b> de navegación evitadas
+     (${num(d.esfuerzo.pct_de_las_horas_de_flota, 1)} % de las horas de la flota), repartidas entre todos los buques
+     o concentradas en los cuatro tipos que más CO₂ emiten por hora.`;
+  lectura.innerHTML =
+    `<b>Elegir dónde recortar rinde un ${num(d.ventaja_de_focalizar.pct, 1)} % más</b>, sin una sola hora de navegación
+     adicional: ${num(d.ventaja_de_focalizar.Mt_adicionales, 2)} Mt de CO₂ que se ahorran solo por decidir en qué buques
+     se aplica el recorte, y <b>${num(d.ventaja_de_focalizar.millones_eur_adicionales, 0)} millones de euros</b> más de
+     derechos que no hay que comprar. El precio de concentrar hay que decirlo: esos cuatro tipos son una minoría de la
+     flota, así que evitar ahí el mismo total les exige un recorte mucho mayor.` +
+    (d.aviso_extrapolacion ? `<br><br>${d.aviso_extrapolacion}` : "");
+}
+
+async function cargarDinero() {
+  let p, n, r;
+  try {
+    [p, n, r] = await Promise.all([
+      pedir("/economia/palancas?palanca=millas_-10pct"),
+      pedir("/economia/navieras?limite=1"),
+      pedir("/navieras/buscar?limite=8"),
+    ]);
+  } catch { return; }
+
+  $("#e-dias tbody").innerHTML = p.por_tipo.map((t) =>
+    `<tr><td>${t.tipo}</td><td><b>${num(t.eur_por_dia_mar, 0)} €</b></td><td>${num(t.ahorro_t, 0)}</td></tr>`).join("")
+    + `<tr><td><em>Media de la flota</em></td><td><em>${num(p.eur_por_dia_mar_flota, 0)} €</em></td><td><em>${num(p.ahorro_mt * 1e6, 0)}</em></td></tr>`;
+
+  animar($("#e-nav-total"), n.factura_total_eur, eur);
+  $("#e-nav-mitad").textContent = num(n.navieras_que_pagan_la_mitad);
+  $("#e-nav-mitad-pie").textContent = `de ${num(n.navieras)} · ${num(n.navieras_de_un_solo_buque)} tienen un solo buque`;
+  $("#e-nav-pool").textContent = num(n.pooling_fueleu.pct_deficit_compensable_por_dentro, 1) + " %";
+  $("#e-nav-pool-pie").textContent = `solo el ${num(n.pooling_fueleu.pct_con_algun_buque_excedentario, 1)} % de las navieras con déficit tiene algún buque excedentario`;
+
+  $("#e-nav-conteo").textContent = `${num(r.navieras.length)} mayores`;
+  const tope = Math.max(...r.navieras.map((v) => v.factura_eur), 1);
+  $("#e-navieras").innerHTML = r.navieras.map((v, i) =>
+    `<button class="item" data-i="${i}">
+       <span class="rank">${i + 1}</span>
+       <span class="cuerpo"><span class="t1">${v.nombre}</span>
+         <span class="t2">${num(v.buques)} buques · ${num(v.co2_t / 1e6, 2)} Mt · ${num(v.cuota_pct, 2)} % de la factura europea</span>
+         <span class="mini"><i style="width:${(v.factura_eur / tope) * 100}%"></i></span></span>
+       <span class="der"><span class="p">${eur(v.factura_eur)}</span><span class="s">al año</span></span>
+     </button>`).join("");
+  $("#e-navieras").querySelectorAll(".item").forEach((b) =>
+    b.addEventListener("click", () => { irA("p-flota"); elegirNaviera(r.navieras[Number(b.dataset.i)]); }));
+}
+
+["#e-millas", "#e-velocidad"].forEach((s) => {
+  $(s).addEventListener("input", () => { leerPlanEuropa(); rebotar("e", () => simularEuropa(true), 150); });
+  $(s).addEventListener("change", () => rebotar("e", () => simularEuropa(false), 0));
+});
+["#e-anio", "#e-familia", "#e-regimen"].forEach((s) => $(s).addEventListener("change", () => simularEuropa(false)));
+$("#e-precio").addEventListener("input", () => rebotar("e", () => simularEuropa(false), 400));
+$("#e-esfuerzo").addEventListener("change", () => focalizado(leerPlanEuropa()));
+$("#e-reset").addEventListener("click", () => {
+  $("#e-millas").value = -10; $("#e-velocidad").value = 0; $("#e-regimen").value = "2026";
+  if (ETS) $("#e-precio").value = num(ETS.precio_eua_eur_t, 2);
+  leerPlanEuropa(); simularEuropa(false);
+});
+
+/* ==================================================================================================
+   RESUMEN — la primera pantalla
+   ================================================================================================== */
+async function cargarResumen() {
+  let serie, niveles, focal;
+  try {
+    [serie, niveles, focal] = await Promise.all([
+      pedir("/flota/serie"),
+      pedir("/explicabilidad"),
+      pedir("/simular/focalizado", { anio: 2025, pct_horas: 0.05 }),
+    ]);
+  } catch (e) {
+    $("#r-frase").innerHTML = "No se ha podido cargar el resumen: " + e.message;
+    return;
+  }
+
+  /* --- el titular: la ventaja de focalizar --- */
+  animar($("#r-num"), focal.ventaja_de_focalizar.pct, (x) => "+" + num(x, 1));
+  $("#r-pie").innerHTML =
+    `Las mismas <b>${num(focal.esfuerzo.horas_a_evitar / 1e6, 2)} millones de horas</b> de navegación evitadas rinden
+     <b>${num(focal.politica_uniforme.ahorro_Mt, 2)} Mt</b> repartidas entre toda la flota y
+     <b>${num(focal.politica_focalizada.ahorro_Mt, 2)} Mt</b> concentradas en ${focal.tipos_objetivo.join(", ")}.
+     La diferencia, ${num(focal.ventaja_de_focalizar.millones_eur_adicionales, 0)} millones de euros en derechos que no
+     hay que comprar, sale solo de <b>decidir dónde</b>.`;
+
+  /* --- los tres objetivos --- */
+  const mejor = niveles.niveles.reduce((a, b) => (b.r2_cv && b.r2_cv > (a.r2_cv || 0) ? b : a));
+  $("#r-o1").innerHTML = `R² ${num(mejor.r2_test, 3)}`;
+  const tipo = niveles.shap.variables.find((v) => v.variable.toLowerCase().startsWith("tipo"));
+  const cols = niveles.shap.niveles;
+  if (tipo) $("#r-o2").innerHTML = `${num(tipo.por_nivel[cols[cols.length - 1]], 1)} <small>%</small>`;
+  $("#r-o3").innerHTML = `${num(focal.politica_focalizada.ahorro_Mt, 2)} <small>Mt de CO₂</small>`;
+
+  $("#r-chips").innerHTML = [
+    `<span class="chip">${num(SALUD.filas_cargadas)} buques-año</span>`,
+    `<span class="chip">${SALUD.anios[0]}–${SALUD.anios.at(-1)}</span>`,
+    `<span class="chip">datos 100 % públicos</span>`,
+  ].join("");
+  $("#r-k1").textContent = num(SALUD.filas_cargadas);
+
+  /* --- la serie de ocho ejercicios --- */
+  dibujarSerie(serie);
+
+  /* --- la escalera de niveles --- */
+  escalera($("#r-escalera"), niveles.niveles);
+}
+
+/* Dos series en el mismo gráfico —declarado y predicho— es la excepción a la regla de un solo color,
+   y se resuelve por forma y no por tono: la observada va en línea continua y la predicha en trazo
+   discontinuo, así que se distinguen también impresas en blanco y negro. */
+function dibujarSerie(serie) {
+  const svg = $("#r-serie"), P = serie.anios;
+  if (!P.length) return;
+  const W = 720, H = 250, mI = 52, mD = 18, mS = 22, mB = 38;
+  const ax = W - mI - mD, ay = H - mS - mB;
+  const max = Math.max(...P.map((p) => Math.max(p.co2_observado_Mt, p.co2_predicho_Mt))) * 1.14;
+  const X = (i) => mI + (i * ax) / (P.length - 1);
+  const Y = (v) => mS + ay - (v / max) * ay;
+
+  let malla = "";
+  for (let k = 0; k <= 3; k++) {
+    const v = (max / 3) * k, y = Y(v);
+    malla += `<line class="malla" x1="${mI}" y1="${y.toFixed(1)}" x2="${W - mD}" y2="${y.toFixed(1)}"/>
+              <text class="eje" x="${mI - 8}" y="${(y + 3.5).toFixed(1)}" text-anchor="end">${num(v, 0)}</text>`;
+  }
+  const dObs = P.map((p, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(p.co2_observado_Mt).toFixed(1)}`).join(" ");
+  const dPre = P.map((p, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(p.co2_predicho_Mt).toFixed(1)}`).join(" ");
+  const area = `${dObs} L${X(P.length - 1).toFixed(1)},${(mS + ay).toFixed(1)} L${X(0).toFixed(1)},${(mS + ay).toFixed(1)} Z`;
+
+  svg.innerHTML =
+    `<defs><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1">
+       <stop offset="0%" stop-color="var(--acento)" stop-opacity=".26"/>
+       <stop offset="100%" stop-color="var(--acento)" stop-opacity="0"/>
+     </linearGradient></defs>
+     ${malla}
+     <path d="${area}" fill="url(#gs)"/>
+     <path class="linea" d="${dObs}"/>
+     <path class="linea" d="${dPre}" stroke="var(--tinta-3)" stroke-width="1.8" stroke-dasharray="5 4"/>` +
+    P.map((p, i) =>
+      `<circle class="punto" cx="${X(i).toFixed(1)}" cy="${Y(p.co2_observado_Mt).toFixed(1)}" r="3.6"/>
+       <text class="eje" x="${X(i).toFixed(1)}" y="${H - 20}" text-anchor="middle">${p.anio}</text>`).join("") +
+    `<text class="eje" x="${mI}" y="${H - 4}" text-anchor="start">— declarado</text>
+     <text class="eje" x="${mI + 96}" y="${H - 4}" text-anchor="start">- - predicho por el modelo</text>
+     <text class="eje" x="${mI - 8}" y="${mS - 8}" text-anchor="end">Mt</text>` +
+    P.map((p, i) =>
+      `<rect class="zona" data-i="${i}" x="${(X(i) - ax / (2 * (P.length - 1))).toFixed(1)}" y="${mS}"
+             width="${(ax / (P.length - 1)).toFixed(1)}" height="${ay}" fill="transparent"/>`).join("");
+
+  svg.querySelectorAll(".zona").forEach((z) => {
+    const p = P[Number(z.dataset.i)];
+    conGlobo(z, `<b>${p.anio}</b>
+      <span class="g">${num(p.buques)} buques declarantes</span>
+      <span class="g">declarado ${num(p.co2_observado_Mt, 2)} Mt · predicho ${num(p.co2_predicho_Mt, 2)} Mt</span>
+      <span class="g">sesgo del modelo ${pct(p.sesgo_pct, 1)}</span>`);
+  });
+
+  const u = P[P.length - 1];
+  $("#r-serie-pie").innerHTML =
+    `El salto de 2024 <b>no es un repunte de la actividad</b>: es la ampliación del Reglamento 2023/957, que mete en el
+     registro tipos de buque que antes no declaraban. Sobre ${u.anio} el modelo predice un ${pct(u.sesgo_pct, 1)}
+     respecto de lo declarado — la firma de haberse entrenado con ocho ejercicios de intensidad media mayor. No afecta a
+     ninguna cifra de ahorro, que son diferencias entre dos predicciones del mismo modelo.`;
+}
+
+/* Escalera de R²: cada peldaño enseña el nivel anterior en gris y la ganancia en azul, porque lo que
+   se quiere comparar no es la altura absoluta sino **lo que suma cada pieza de información**. */
+function escalera(caja, niveles) {
+  const utiles = niveles.filter((n) => n.r2_cv != null || n.r2_test != null);
+  const max = Math.max(...utiles.map((n) => n.r2_test));
+  caja.innerHTML = "";
+  let previo = 0;
+  for (const n of utiles) {
+    const v = n.r2_test, gan = v - previo;
+    const el = document.createElement("div");
+    el.className = "peldano";
+    el.innerHTML =
+      `<span class="et">${bonito(n.nivel).replace(/^\d+\.\s*/, "")}</span>
+       <span class="val2">${num(v, 3)} <span class="gan">${previo ? "+" + num(gan, 3) : ""}</span></span>
+       <span class="pista2"><i style="width:0"></i><u style="width:0"></u></span>`;
+    caja.appendChild(el);
+    const base = (previo / max) * 100, extra = (gan / max) * 100;
+    requestAnimationFrame(() => {
+      el.querySelector("i").style.width = base + "%";
+      el.querySelector("u").style.width = extra + "%";
+    });
+    conGlobo(el, `<b>${bonito(n.nivel)}</b>
+      <span class="g">${n.n_variables} variables · R² test ${num(v, 4)}</span>
+      <span class="g">error típico ${num(n.mae_test, 0)} t por buque</span>
+      ${previo ? `<span class="g">gana ${num(gan, 4)} de R² sobre el nivel anterior</span>` : ""}`);
+    previo = v;
+  }
+}
+
+document.querySelectorAll(".objetivo").forEach((b) => b.addEventListener("click", () => irA(b.dataset.ir)));
+
+/* ==================================================================================================
+   POR QUÉ EMITE — interpretabilidad
+   ================================================================================================== */
+let EXPL = null, NIVEL_SHAP = 0;
+
+async function cargarPorque() {
+  try { EXPL = await pedir("/explicabilidad"); }
+  catch (e) { $("#q-shap-pie").textContent = e.message; return; }
+
+  NIVEL_SHAP = EXPL.shap.niveles.length - 1;
+  $("#q-niveles").innerHTML = EXPL.shap.niveles.map((n, i) => {
+    const fila = EXPL.niveles[i];
+    return `<button data-i="${i}" aria-pressed="${i === NIVEL_SHAP}">${corto(n)}
+              <span class="r2">${fila ? "R² " + num(fila.r2_test, 3) : ""}</span></button>`;
+  }).join("");
+  $("#q-niveles").querySelectorAll("button").forEach((b) =>
+    b.addEventListener("click", () => { NIVEL_SHAP = Number(b.dataset.i); pintarShap(); }));
+
+  $("#q-chips").innerHTML = [
+    `<span class="chip">SHAP sobre el conjunto de test</span>`,
+    `<span class="chip">contrastado con total_gain y permutación</span>`,
+  ].join("");
+
+  pintarShap();
+  pintarCaida();
+  pintarHora();
+  escalera($("#q-escalera"), EXPL.niveles);
+  $("#q-niveles-pie").innerHTML = EXPL.nota_niveles;
+}
+
+/* Las barras no se recrean al cambiar de nivel: se reusan y solo cambia el ancho, de modo que el
+   salto del tipo de buque se **ve moverse**. Recrear el nodo perdería la transición, que aquí no es
+   adorno: es el argumento. */
+function pintarShap() {
+  const col = EXPL.shap.niveles[NIVEL_SHAP];
+  const filas = EXPL.shap.variables
+    .map((v) => ({ n: v.variable, v: v.por_nivel[col] ?? 0, todos: v.por_nivel }))
+    .filter((f) => f.v > 0.05)
+    .sort((a, b) => b.v - a.v);
+  const tope = Math.max(...filas.map((f) => f.v), 1);
+  const caja = $("#q-shap");
+  caja.innerHTML = "";
+  for (const f of filas) {
+    const el = document.createElement("div");
+    el.className = "barra";
+    const esTipo = f.n.toLowerCase().startsWith("tipo");
+    el.innerHTML =
+      `<div class="nom" title="${f.n}">${f.n}</div>
+       <div class="pista"><div class="relleno ${esTipo ? "" : "gris"}" style="width:0"></div>
+         <span class="v"><b>${num(f.v, 1)}</b> %</span></div>`;
+    caja.appendChild(el);
+    requestAnimationFrame(() => { el.querySelector(".relleno").style.width = (f.v / tope) * 100 + "%"; });
+    conGlobo(el, `<b>${f.n}</b>` + EXPL.shap.niveles.map((c) =>
+      `<span class="g">${corto(c)}: ${f.todos[c] ? num(f.todos[c], 1) + " %" : "—"}</span>`).join(""));
+  }
+  $("#q-niveles").querySelectorAll("button").forEach((b) =>
+    b.setAttribute("aria-pressed", String(Number(b.dataset.i) === NIVEL_SHAP)));
+  $("#q-shap-pie").innerHTML = NIVEL_SHAP === EXPL.shap.niveles.length - 1
+    ? EXPL.shap.lectura
+    : `Nivel <b>${corto(col)}</b>. ${EXPL.shap.aviso}`;
+}
+
+function pintarCaida() {
+  const cols = EXPL.shap.niveles;
+  const tipo = EXPL.shap.variables.find((v) => v.variable.toLowerCase().startsWith("tipo"));
+  if (!tipo) return;
+  const antes = tipo.por_nivel[cols[0]], despues = tipo.por_nivel[cols[cols.length - 1]];
+  animar($("#q-caida"), despues, (x) => num(x, 1) + " %");
+  $("#q-caida-antes").textContent = num(antes, 1) + " %";
+
+  const caja = $("#q-caida-barras");
+  caja.className = "comparativa";
+  caja.style.maxWidth = "460px";
+  caja.style.setProperty("--nom", "146px");
+  caja.innerHTML = cols.map((c, i) => {
+    const v = tipo.por_nivel[c] ?? 0;
+    return `<div class="c-fila ${i === cols.length - 1 ? "act" : ""}">
+              <span class="c-nom">${corto(c).replace(" + ", " + ")}</span>
+              <span class="c-pista"><i style="width:0"></i></span>
+              <span class="c-val">${num(v, 1)} %</span></div>`;
+  }).join("");
+  const tope = Math.max(...cols.map((c) => tipo.por_nivel[c] ?? 0), 1);
+  requestAnimationFrame(() => {
+    caja.querySelectorAll(".c-pista i").forEach((b, i) => {
+      b.style.width = ((tipo.por_nivel[cols[i]] ?? 0) / tope) * 100 + "%";
+    });
+  });
+}
+
+function pintarHora() {
+  const filas = EXPL.coste_por_hora.slice().sort((a, b) => b.t_co2_por_hora - a.t_co2_por_hora);
+  const tope = Math.max(...filas.map((f) => f.t_co2_por_hora));
+  const caja = $("#q-hora");
+  caja.innerHTML = "";
+  const objetivo = new Set(["LNG carrier", "Passenger ship", "Ro-pax ship", "Container ship"]);
+  for (const f of filas) {
+    const el = document.createElement("div");
+    el.className = "barra";
+    el.innerHTML =
+      `<div class="nom" title="${f.tipo}">${f.tipo}</div>
+       <div class="pista"><div class="relleno ${objetivo.has(f.tipo) ? "" : "gris"}" style="width:0"></div>
+         <span class="v"><b>${num(f.t_co2_por_hora, 2)}</b> t/h</span></div>`;
+    caja.appendChild(el);
+    requestAnimationFrame(() => { el.querySelector(".relleno").style.width = (f.t_co2_por_hora / tope) * 100 + "%"; });
+    conGlobo(el, `<b>${f.tipo}</b><span class="g">${num(f.n)} buques-año en test</span>
+      <span class="g">${num(f.t_co2_por_hora, 3)} t de CO₂ por hora navegada</span>`);
+  }
+  const max = filas[0], min = filas[filas.length - 1];
+  $("#q-hora-pie").innerHTML =
+    `Entre <b>${num(min.t_co2_por_hora, 2)} t</b> (${min.tipo}) y <b>${num(max.t_co2_por_hora, 2)} t</b> (${max.tipo}):
+     más del doble por la misma hora de mar. En azul, los cuatro tipos sobre los que se concentra la política que el
+     trabajo recomienda. Es exactamente por eso que <b>repartir el recorte por igual desaprovecha la mitad del ahorro</b>.`;
+}
+
+/* ==================================================================================================
+   PABELLÓN — de qué país se paga la factura
+   ================================================================================================== */
+/* La bandera se compone con los dos indicadores regionales Unicode del código ISO alfa-2: cero
+   imágenes, cero peticiones, y funciona sin red. Donde el sistema no tenga las banderas, se degrada
+   a dos letras, que siguen identificando al país. */
+const bandera = (iso2) => !iso2 ? "" :
+  String.fromCodePoint(...iso2.toUpperCase().split("").map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
+
+async function cargarPabellon() {
+  let d;
+  try { d = await pedir("/pabellon/mapa?limite=12"); }
+  catch { $("#e-panel-pabellon").hidden = true; return; }
+
+  const dentro = d.bloques.find((b) => b.bloque === "Dentro del EEE");
+  const fuera = d.bloques.find((b) => b.bloque === "Fuera del EEE");
+  const abierto = d.bloques.find((b) => b.bloque.includes("registro abierto"));
+
+  if (dentro && fuera) {
+    const barra = $("#e-bloques");
+    barra.innerHTML =
+      `<i style="flex:${dentro.cuota_factura_pct};background:var(--acento)">Dentro del EEE · ${num(dentro.cuota_factura_pct, 1)} %</i>
+       <i style="flex:${fuera.cuota_factura_pct};background:var(--neutro)">Fuera del EEE · ${num(fuera.cuota_factura_pct, 1)} %</i>`;
+    conGlobo(barra.children[0], `<b>Dentro del EEE</b><span class="g">${num(dentro.buques)} buques · ${num(dentro.co2_Mt, 2)} Mt</span><span class="g">${num(dentro.factura_MEUR, 0)} M€ de factura</span>`);
+    conGlobo(barra.children[1], `<b>Fuera del EEE</b><span class="g">${num(fuera.buques)} buques · ${num(fuera.co2_Mt, 2)} Mt</span><span class="g">${num(fuera.factura_MEUR, 0)} M€ de factura</span>`);
+    $("#e-bloques-ley").innerHTML =
+      `<span style="--tono:var(--acento)">registrados en el Espacio Económico Europeo</span>
+       <span style="--tono:var(--neutro)">registrados fuera</span>`;
+  }
+
+  $("#e-pab-conteo").textContent = `${num(d.paises.length)} de ${num(d.paises_totales)} países`;
+  const tope = Math.max(...d.paises.map((p) => p.factura_MEUR));
+  const caja = $("#e-pabellon");
+  caja.innerHTML = "";
+  for (const p of d.paises) {
+    const el = document.createElement("div");
+    el.className = "barra";
+    const fuera_eee = p.bloque !== "Dentro del EEE";
+    el.innerHTML =
+      `<div class="nom" title="${p.pais}"><span class="bandera">${bandera(p.iso2)}</span> ${p.pais}</div>
+       <div class="pista"><div class="relleno ${fuera_eee ? "gris" : ""}" style="width:0"></div>
+         <span class="v"><b>${num(p.factura_MEUR, 0)}</b> M€</span></div>`;
+    caja.appendChild(el);
+    requestAnimationFrame(() => { el.querySelector(".relleno").style.width = (p.factura_MEUR / tope) * 100 + "%"; });
+    conGlobo(el, `<b>${bandera(p.iso2)} ${p.pais}</b>
+      <span class="g">${num(p.buques)} buques · ${num(p.co2_Mt, 2)} Mt de CO₂</span>
+      <span class="g">${num(p.factura_MEUR, 0)} M€ de factura · ${num(p.cuota_pct, 2)} % del total europeo</span>
+      <span class="g">${p.bloque}${p.pct_registro_abierto > 50 ? " · registro abierto (lista ITF)" : ""}</span>`);
+  }
+  $("#e-pab-pie").innerHTML =
+    (fuera ? `<b>${num(fuera.cuota_factura_pct, 1)} % de la factura europea la pagan buques registrados fuera del EEE.</b> ` : "") +
+    `El régimen grava la escala en puerto europeo, no la nacionalidad del registro: el instrumento alcanza a quien opera
+     en Europa aunque no esté registrado en Europa.` +
+    (abierto ? ` Los registros que la ITF clasifica como pabellones de conveniencia suman el
+     ${num(abierto.cuota_factura_pct, 1)} % de la factura.` : "") +
+    `<br><br><span style="color:var(--tinta-3)">${d.aviso}</span>`;
+}
+
+/* ==================================================================================================
+   MODO PRESENTACIÓN
+   ================================================================================================== */
+/* Un recorrido guiado de seis paradas que deja la herramienta contando sola el trabajo entero. Existe
+   para que el orden del relato no quede al azar y para que quien abra esto sin contexto sepa por
+   dónde empezar. Cada parada cambia de panel, mueve un mando de verdad y espera: no hay ni una
+   cifra grabada, todo lo que se ve son respuestas del servicio. */
+const GUION = [
+  {
+    panel: "p-resumen", foco: "#r-foco", espera: 9000,
+    txt: `<b>Estela</b> predice, explica y simula las emisiones de CO₂ de los 25.802 buques que declaran al registro
+          europeo. Todo con datos públicos. El resultado que ordena el trabajo está arriba: a igualdad de esfuerzo,
+          <b>elegir dónde recortar rinde casi el doble</b>.`,
+  },
+  {
+    panel: "p-resumen", foco: "#r-panel-serie", espera: 8000,
+    txt: `Ocho ejercicios, no una foto. La línea continua es lo declarado; la discontinua, lo que predice el modelo
+          sobre esas mismas filas. El salto de 2024 es un cambio de reglamento, no un repunte de tráfico.`,
+  },
+  {
+    panel: "p-porque", foco: "#q-panel-caida", espera: 10000,
+    accion: async () => { for (let i = 0; i < EXPL.shap.niveles.length; i++) { NIVEL_SHAP = i; pintarShap(); await dormir(1400); } },
+    txt: `El segundo objetivo: <b>por qué</b> emite lo que emite. Al darle al modelo el tamaño y la velocidad, el tipo
+          de buque se desploma del 41,6 % al 6,6 % de la explicación. <b>Nunca fue la causa</b>: hacía de sustituto de
+          algo que nadie había medido.`,
+  },
+  {
+    panel: "p-porque", foco: "#q-panel-hora", espera: 8000,
+    txt: `Y el número accionable que sale de ahí: una hora de navegación cuesta <b>el doble</b> en un metanero que en un
+          carguero general. Ahí está la razón de que repartir el recorte por igual desaproveche la mitad del ahorro.`,
+  },
+  {
+    panel: "p-flota", foco: "#f-foco", espera: 10000,
+    accion: async () => {
+      $("#f-millas").value = 0; $("#f-velocidad").value = 0; leerPlanFlota(); await simularNaviera(); await dormir(1500);
+      $("#f-millas").value = -10; leerPlanFlota(); await simularNaviera();
+    },
+    txt: `Para quien gestiona una flota, todo esto se convierte en una pantalla: elige su naviera, elige un plan y ve
+          <b>cuánto CO₂ y cuánto dinero</b>, en qué buques empezar y cuáles caen de calificación antes de 2028.`,
+  },
+  {
+    panel: "p-europa", foco: "#e-panel-duelo", espera: 11000,
+    txt: `Y para quien hace la política, el resultado de cabecera: las <b>mismas</b> horas de navegación evitadas rinden
+          casi el doble concentradas en los cuatro tipos de mayor intensidad que repartidas por igual. No es cuánto se
+          recorta. Es <b>dónde</b>.`,
+  },
+];
+
+const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
+let DEMO = { activa: false, cancelar: null };
+
+function pararDemo() {
+  DEMO.activa = false;
+  if (DEMO.cancelar) DEMO.cancelar();
+  document.querySelector(".rotulo-demo")?.remove();
+  document.querySelectorAll(".enfocado").forEach((e) => e.classList.remove("enfocado"));
+  $("#btn-demo").classList.remove("activo");
+  $("#btn-demo-txt").textContent = "Modo presentación";
+}
+
+async function correrDemo() {
+  if (DEMO.activa) { pararDemo(); return; }
+  DEMO.activa = true;
+  $("#btn-demo").classList.add("activo");
+  $("#btn-demo-txt").textContent = "Detener";
+
+  const rotulo = document.createElement("div");
+  rotulo.className = "rotulo-demo";
+  rotulo.innerHTML = `<span class="paso">1</span><span class="txt"></span>
+    <button class="salir">Salir</button><span class="progreso"><i></i></span>`;
+  document.body.appendChild(rotulo);
+  rotulo.querySelector(".salir").addEventListener("click", pararDemo);
+
+  for (let i = 0; i < GUION.length && DEMO.activa; i++) {
+    const p = GUION[i];
+    irA(p.panel);
+    await dormir(320);
+    if (!DEMO.activa) break;
+
+    document.querySelectorAll(".enfocado").forEach((e) => e.classList.remove("enfocado"));
+    const nodo = p.foco && $(p.foco);
+    if (nodo) { nodo.classList.add("enfocado"); nodo.scrollIntoView({ behavior: "smooth", block: "center" }); }
+
+    rotulo.querySelector(".paso").textContent = String(i + 1);
+    rotulo.querySelector(".txt").innerHTML = p.txt;
+
+    const barra = rotulo.querySelector(".progreso i");
+    barra.style.transition = "none"; barra.style.width = "0";
+    requestAnimationFrame(() => {
+      barra.style.transition = `width ${p.espera}ms linear`;
+      barra.style.width = "100%";
+    });
+
+    if (p.accion) Promise.resolve().then(p.accion).catch(() => { /* una parada que falla no tumba el recorrido */ });
+    await new Promise((r) => { DEMO.cancelar = r; setTimeout(r, p.espera); });
+  }
+  if (DEMO.activa) pararDemo();
+}
+
+$("#btn-demo").addEventListener("click", correrDemo);
+addEventListener("keydown", (e) => { if (e.key === "Escape" && DEMO.activa) pararDemo(); });
+
+
+arrancar();
+</script>
+</body>
+</html>
