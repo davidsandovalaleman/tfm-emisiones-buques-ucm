@@ -1,9 +1,9 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # .gitignore — TFM Predicción de emisiones de CO₂ de buques
 #
-# Criterio: el repositorio debe poder clonarse y ejecutarse. Por eso SÍ se
-# versionan los modelos y los datos procesados (~50 MB en total), y NO se
-# versiona lo que es descargable de su fuente o regenerable.
+# Criterio: el repositorio debe poder clonarse y ejecutarse de punta a punta.
+# Por eso SÍ se versionan los datos crudos, los procesados y los modelos, y NO
+# se versiona lo que es regenerable.
 # ─────────────────────────────────────────────────────────────────────────────
 
 # ── Python / entorno ─────────────────────────────────────────────────────────
@@ -22,11 +22,10 @@ env/
 # ── Datos ────────────────────────────────────────────────────────────────────
 # data/processed/  SÍ se versiona: son los nueve ficheros que permiten reproducir
 #                  el proyecto desde el notebook 02 sin descargar nada.
-# data/raw/        NO: 44 MB de Excel publicados por EMSA, descargables tal cual
-#                  de https://mrv.emsa.europa.eu/#public/emission-report con los
-#                  nombres que espera YEAR_FILES en src/ingest_mrv.py.
-data/raw/*
-!data/raw/.gitkeep
+# data/raw/        SÍ se versiona: los ocho Excel de EMSA (44 MB, ninguno por
+#                  encima de 12 MB), sin modificar, tal como se descargaron de
+#                  https://mrv.emsa.europa.eu/#public/emission-report. Así el
+#                  pipeline se reproduce desde el notebook 01 sin depender del portal.
 
 # ── Base de datos generada por el notebook 09 ────────────────────────────────
 *.sqlite
