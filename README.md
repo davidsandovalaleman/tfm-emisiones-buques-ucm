@@ -39,7 +39,7 @@ models/            Modelos entrenados y sus preprocesos
 reports/           Figuras y tablas generadas para la memoria
 docs/              Memoria del trabajo, con sus anexos
 deploy/            Dockerfile y dependencias del servicio público
-video/             Guion y materiales del vídeo
+video/             Vídeo de presentación del trabajo
 ```
 
 El repositorio se versiona entero **salvo** `data/raw/` (44 MB de Excel descargables de EMSA),
